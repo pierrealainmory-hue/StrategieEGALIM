@@ -48,6 +48,11 @@
             font-weight: 400;
         }
         
+        /* Correction critique pour H1 qui n'héritait pas correctement */
+        h1 {
+            font-family: 'Oswald', sans-serif !important;
+        }
+
         p, li, span, div {
             font-family: 'Georgia', serif;
         }
@@ -96,33 +101,44 @@
             padding-bottom: 50px !important;
         }
         
-        /* Style pour les blocs logos */
+        /* Style pour les blocs logos (CORRECTION FINALE) */
         .logo-ref-block {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            /* Hauteur ajustée pour les logos */
-            height: 140px; 
+            padding: 1rem; /* Padding augmenté */
+            min-height: 150px; /* Hauteur minimale augmentée */
+            height: auto; 
             border: 1px solid #405F59;
             background-color: white;
             transition: all 0.3s;
+            overflow: hidden; /* Empêche les débordements */
         }
         .logo-ref-block:hover {
             border-color: #549e39;
         }
-        .logo-ref-block img {
-            /* Hauteur maximale augmentée pour les logos */
-            max-height: 120px; 
-            /* Laisser la largeur se baser sur la hauteur maximale pour les images carrées ou plus larges */
-            width: 100%; 
-            /* Retrait de object-fit: contain pour forcer l'image à remplir l'espace horizontal */
-            object-fit: scale-down; 
+        
+        /* L'image peut maintenant prendre 100% de la hauteur du conteneur */
+        .logo-ref-block img,
+        .logo-ref-block svg {
+            max-height: 100%; 
+            max-width: 95%; 
+            width: auto;
+            object-fit: contain; 
             filter: grayscale(100%);
             transition: filter 0.3s;
         }
-        .logo-ref-block:hover img {
+        .logo-ref-block:hover img,
+        .logo-ref-block:hover svg {
             filter: grayscale(0%);
+        }
+        
+        /* Style spécifique pour le texte dans les placeholders SVG */
+        .logo-ref-block svg text {
+            fill: #405F59; /* brandDark */
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
         }
         
         /* Style pour les boutons de simulation actif/inactif */
@@ -145,7 +161,8 @@
         <div class="inline-block border border-brandDark px-4 py-1 mb-6 text-sm tracking-widest uppercase font-display text-brandDark">
             Restauration Collective Publique
         </div>
-        <h1 class="text-5xl md:text-7xl text-brandDark mb-8 leading-tight">
+        <!-- AJOUT DE font-display À CETTE LIGNE POUR FORCER OSWALD -->
+        <h1 class="text-5xl md:text-7xl text-brandDark mb-8 leading-tight font-display">
             Diagnostic Stratégique <br><span class="text-brandLight">EGALIM</span>
         </h1>
         <p class="text-xl md:text-2xl text-brandDark max-w-3xl mx-auto mb-12 leading-relaxed">
@@ -279,7 +296,7 @@
                 
                 <!-- COLONNE 1 (GAUCHE) : Descriptif -->
                 <div class="col-span-1">
-                    <h3 class="text-3xl text-brandDark mt-2 mb-6 font-display">Simulation des Résultats</h3>
+                    <h3 class="text-3xl text-brandDark mt-2 mb-6 font-display">Outils de pilotage</h3>
                     <p class="text-lg text-brandDark mb-8 leading-relaxed">
                         Nous ne vous livrons pas seulement un rapport, mais des outils de pilotage visuels pour comprendre vos leviers d'économies.
                     </p>
@@ -318,7 +335,7 @@
                 <!-- COLONNE 2 (DROITE) : Graphiques Interactifs -->
                 <div class="bg-brandBg p-8 border border-brandDark col-span-1">
                     <div class="mb-6 flex justify-between items-center border-b border-brandDark pb-4">
-                        <h3 class="font-display text-xl text-brandDark">Simulation de la Stratégie</h3>
+                        <h3 class="font-display text-xl text-brandDark">Outils de pilotage</h3>
                         <div class="flex gap-2">
                             <button id="btn-initial" onclick="updateCharts('initial')" class="text-xs font-display uppercase tracking-wider px-3 py-2 transition btn-simulation-active">Situation Initiale</button>
                             <button id="btn-optimized" onclick="updateCharts('optimized')" class="text-xs font-display uppercase tracking-wider px-3 py-2 transition btn-simulation-inactive">Après Stratégie</button>
@@ -362,35 +379,49 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center">
                 
-                <!-- Logo 1: Métropole de Lyon -->
+                <!-- Logo 1: Métropole de Lyon (URL Rétablie vers une version simple) -->
                 <div class="logo-ref-block">
-                    <!-- REMPLACER CETTE URL PAR LE LIEN PUBLIC DU LOGO -->
-                    <!-- URL du logo de Lyon fournie par l'utilisateur -->
-                    <img src="https://www.lyonmag.com/media/images/thumb/1200x675_6314c50d25e5d-metropole-grand-lyon-logo-1.png" alt="Logo Métropole de Lyon" class="h-10 w-auto object-contain">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://www.lyoncapitale.fr/wp-content/uploads/2022/09/logo-metropole-grand-lyon-580x203.png" 
+                         alt="Logo Métropole de Lyon" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=M%C3%A9tropole+Lyon'">
                 </div>
                 
-                <!-- Logo 2: Bordeaux Métropole -->
+                <!-- Logo 2: Bordeaux Métropole (URL Rétablie vers une version simple) -->
                 <div class="logo-ref-block">
-                    <!-- REMPLACER CETTE URL PAR LE LIEN PUBLIC DU LOGO -->
-                    <img src="https://placehold.co/120x60/FFFFFF/405F59/png?text=Bordeaux+M%C3%A9tropole" alt="Logo Bordeaux Métropole" class="h-10 w-auto object-contain">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://grapheine.com/wp-content/uploads/2015/01/logo-bordeaux-metropole1-1024x425.webp" 
+                         alt="Logo Bordeaux Métropole" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Bordeaux+M%C3%A9tropole'">
                 </div>
                 
-                <!-- Logo 3: Grand Paris Sud -->
+                <!-- Logo 3: Grand Paris Sud (URL Rétablie vers une version simple) -->
                 <div class="logo-ref-block">
-                    <!-- REMPLACER CETTE URL PAR LE LIEN PUBLIC DU LOGO -->
-                    <img src="https://placehold.co/120x60/FFFFFF/405F59/png?text=Grand+Paris+Sud" alt="Logo Grand Paris Sud" class="h-10 w-auto object-contain">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://static.neopse.com/medias/p/2144/site/43/27/15/432715687066024f603d4cc777bb15e74c6a218f.jpg?v=v1" 
+                         alt="Logo Grand Paris Sud" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Grand+Paris+Sud'">
                 </div>
                 
-                <!-- Logo 4: Val de Garonne -->
+                <!-- Logo 4: Val de Garonne (URL Fichier Source) -->
                 <div class="logo-ref-block">
-                    <!-- REMPLACER CETTE URL PAR LE LIEN PUBLIC DU LOGO -->
-                    <img src="https://placehold.co/120x60/FFFFFF/405F59/png?text=Val+de+Garonne" alt="Logo Val de Garonne" class="h-10 w-auto object-contain">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://valdegaronne.fr/uploads/Eam/mod-1/logo.png" 
+                         alt="Logo Val de Garonne" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Val+de+Garonne'">
                 </div>
                 
-                <!-- Logo 5: Province de Liège -->
+                <!-- Logo 5: Ceinture Aliment-Terre de Liège (URL Rétablie vers une version simple) -->
                 <div class="logo-ref-block">
-                    <!-- REMPLACER CETTE URL PAR LE LIEN PUBLIC DU LOGO -->
-                    <img src="https://placehold.co/120x60/FFFFFF/405F59/png?text=Province+Li%C3%A8ge" alt="Logo Province de Liège" class="h-10 w-auto object-contain">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://s2.qwant.com/thumbr/474x225/d/2/bf5ad87117900ed771247e99f40f6157aa99f82197779c81834fd1886bcf31/OIP.M13IJL0DcPq0TrR45BoBhwHaDh.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%2Fid%2FOIP.M13IJL0DcPq0TrR45BoBhwHaDh%3Fpid%3DApi&q=0&b=1&p=0&a=0" 
+                         alt="Logo Ceinture Aliment-Terre de Liège" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Ceinture+Li%C3%A8ge'">
                 </div>
 
             </div>
