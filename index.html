@@ -3,1540 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gouvernance ILOCC - Restitution</title>
-    
-    <!-- Import Tailwind CSS -->
+    <title>Dix Autrement | Diagnostic Stratégique EGALIM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Import Chart.js for Vision Tab -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Import Google Fonts: Oswald & Georgia -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&display=swap" rel-stylesheet">
 
-    <!-- Import Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#405F59',
+                        brandLight: '#549e39',
+                        brandBg: '#f3f3f3',
+                        brandSecondary: '#88a8a2',
+                    },
+                    fontFamily: {
+                        sans: ['Georgia', 'serif'],
+                        display: ['Oswald', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- Custom Styles for D.I.X. Charter -->
     <style>
-        :root {
-            --dix-dark: #405F59;
-            --dix-light: #549e39;
-            --dix-white: #f3f3f3;
-        }
-
+        /* Fond transparent pour se fondre dans Strikingly */
         body {
-            font-family: 'Georgia', serif;
-            color: var(--dix-dark);
-            background-color: var(--dix-white);
+            background-color: transparent; 
+            color: #405F59;
+            /* Hauteur ajustée pour garantir le défilement complet */
+            min-height: 1200px; 
+            padding-bottom: 50px;
+            overflow-y: scroll; /* Assure le défilement si nécessaire */
         }
 
-        .font-oswald {
-            font-family: 'Oswald', sans-serif;
-        }
-        
-        .font-georgia {
-            font-family: 'Georgia', serif;
-        }
-
-        /* Colors Utility Classes override */
-        .text-dix-dark { color: var(--dix-dark); }
-        .bg-dix-dark { background-color: var(--dix-dark); }
-        .border-dix-dark { border-color: var(--dix-dark); }
-        
-        .text-dix-light { color: var(--dix-light); }
-        .bg-dix-light { background-color: var(--dix-light); }
-        .border-dix-light { border-color: var(--dix-light); }
-        
-        .text-dix-white { color: var(--dix-white); }
-        .bg-dix-white { background-color: var(--dix-white); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-
-        .actor-btn.active {
-            background-color: var(--dix-white);
-            border-color: var(--dix-dark);
-            color: var(--dix-dark);
-        }
-
-        /* Tab Navigation Styles */
-        .nav-tab {
-            position: relative;
-            transition: all 0.3s ease;
-            opacity: 0.7;
-        }
-        .nav-tab:hover { opacity: 1; }
-        .nav-tab.active { opacity: 1; font-weight: 500; }
-        .nav-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px; left: 0; width: 100%; height: 4px;
-            background-color: var(--dix-light);
-        }
-
-        /* --- STYLES SPÉCIFIQUES MATRICE (Refonte D.I.X.) --- */
-        .matrix-container table {
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-        .matrix-container th {
-            font-family: 'Oswald', sans-serif;
+        /* Titres, boutons, etc. qui doivent être en Oswald */
+        h1, h2, h3, h4, .nav-item, .btn-text, .font-display {
+            font-family: 'Oswald', sans-serif !important;
+            text-transform: uppercase;
             font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.85rem;
-            color: var(--dix-white);
-            background-color: var(--dix-dark);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            padding: 16px;
-            text-align: left;
-            position: sticky;
-            top: 0;
-            z-index: 30;
-        }
-        /* Sticky first column header */
-        .matrix-container th:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 40;
-            background-color: var(--dix-dark);
-            border-right: 2px solid var(--dix-light);
-        }
-        .matrix-container td {
-            font-family: 'Georgia', serif;
-            font-size: 0.85rem;
-            color: var(--dix-dark);
-            padding: 16px;
-            background-color: white;
-            border-bottom: 1px solid rgba(64, 95, 89, 0.1);
-            border-right: 1px solid rgba(64, 95, 89, 0.05);
-            vertical-align: top;
-            line-height: 1.4;
-        }
-        /* Sticky first column body */
-        .matrix-container td:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 20;
-            background-color: var(--dix-white);
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
-            font-weight: 500;
-            font-size: 0.8rem;
-            border-right: 2px solid var(--dix-light);
-            color: var(--dix-dark);
-        }
-        .matrix-container tr:hover td {
-            background-color: rgba(84, 158, 57, 0.05);
-        }
-        /* Highlight column style (Representation) - D.I.X version */
-        .matrix-container td:nth-child(2) {
-            background-color: rgba(84, 158, 57, 0.03);
-            font-weight: bold;
-            color: var(--dix-dark);
-        }
-
-        /* --- STYLES SPÉCIFIQUES FILIÈRE --- */
-        .filiere-grid {
-            display: grid;
-            grid-template-columns: 80px repeat(5, 1fr);
-            grid-template-rows: auto auto auto auto;
-            gap: 12px;
-            align-items: stretch;
-        }
-
-        .node-base {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
-            border: 1px solid #E5E7EB;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 95px; /* Increased height */
-            padding: 10px 30px 10px 12px; /* Increased padding */
-            border-radius: 4px;
-        }
-        .node-base:hover {
-            border-color: var(--dix-light);
-            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-            z-index: 60;
-        }
-
-        .is-member-highlight {
-            border-color: var(--dix-light) !important;
-            box-shadow: 0 0 15px rgba(84, 158, 57, 0.3) !important;
-            transform: scale(1.05);
-            z-index: 40;
-        }
-        .not-member-dimmed {
-            opacity: 0.25;
-            filter: grayscale(0.8);
-        }
-
-        .actor-icon-strip {
-            position: absolute;
-            right: 4px; top: 0; bottom: 0;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            gap: 1px; font-size: 1rem; /* Increased size significantly */
-            border-left: 1px solid rgba(229, 231, 235, 0.5);
-            padding-left: 4px;
-            background: linear-gradient(to left, rgba(255,255,255,0.95), transparent);
-            width: 24px;
-        }
-
-        .row-header {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 1rem; /* Increased size significantly */
-            letter-spacing: 0.1em;
-            padding: 10px;
-            position: relative;
-        }
-
-        .header-ovine { background: #EFF6FF; color: #1E40AF; margin-bottom: -6px; }
-        .header-caprine { background: #ECFDF5; color: #065F46; margin-top: -6px; }
-        .header-pivot {
-            background: linear-gradient(to bottom, #EFF6FF, #ECFDF5);
-            grid-row: 3; grid-column: 1;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: var(--dix-dark); font-weight: 800; z-index: 5; /* Increased size */
-            font-family: 'Oswald', sans-serif;
-        }
-
-        .col-header {
-            font-size: 0.95rem; font-family: 'Oswald', sans-serif; /* Increased size */
-            text-transform: uppercase; color: #9CA3AF;
-            text-align: center; padding-bottom: 8px;
-            border-bottom: 2px solid #E5E7EB;
-        }
-
-        .amont-block { background-color: rgba(240, 253, 244, 0.4); padding: 10px; border-radius: 4px; }
-        .aval-block { background-color: rgba(239, 246, 255, 0.4); padding: 10px; border-radius: 4px; }
-
-        .key-term { font-size: 0.75rem; color: #6B7280; font-style: italic; margin-top: 2px; line-height: 1.1; font-family: 'Georgia', serif; } /* Increased size */
-        .member-indicator { position: absolute; top: 4px; left: 4px; color: var(--dix-light); font-size: 0.75rem; font-weight: 900; } /* Increased size */
-
-        /* Stats Bars */
-        .stat-bar-container {
-            width: 100%; background-color: #F3F4F6;
-            border-radius: 9999px; height: 8px;
-            overflow: hidden; margin-top: 4px;
-        }
-        .stat-bar-fill {
-            height: 100%; border-radius: 9999px;
-            transition: width 1.5s ease-in-out;
         }
         
-        /* LOGIN OVERLAY STYLES */
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* Correction critique pour H1 qui n'héritait pas correctement */
+        h1 {
+            font-family: 'Oswald', sans-serif !important;
+        }
+
+        p, li, span, div {
+            font-family: 'Georgia', serif;
+        }
+
+        /* Hauteur par défaut pour les graphiques */
+        .chart-container {
+            position: relative;
             width: 100%;
-            height: 100%;
-            background-color: var(--dix-dark);
-            z-index: 9999;
+            height: 300px;
+        }
+        /* Hauteur ajustée pour les graphiques en 3 colonnes */
+        .chart-container-small {
+            height: 200px;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(64, 95, 89, 0.15);
+        }
+
+        /* Style pour le bouton actif (VERT) */
+        .step-active {
+            border-color: #549e39 !important;
+            background-color: #ffffff !important;
+            color: #549e39 !important;
+            box-shadow: 0 0 10px rgba(84, 158, 57, 0.3); /* Ombre légère pour le statut actif */
+        }
+        /* Style pour les boutons inactifs ou en survol */
+        .step-inactive {
+            background-color: transparent;
+            color: #405F59;
+            border-color: #405F59;
+        }
+        .step-inactive:hover:not(.step-active) {
+            background-color: #f0f0f0; /* Grisé au survol */
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        /* Ajustement des marges des sections */
+        section {
+            padding-top: 50px !important;
+            padding-bottom: 50px !important;
+        }
+        
+        /* Style pour les blocs logos (CORRECTION FINALE) */
+        .logo-ref-block {
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-        }
-        
-        .login-box {
+            padding: 1rem; /* Padding augmenté */
+            min-height: 150px; /* Hauteur minimale augmentée */
+            height: auto; 
+            border: 1px solid #405F59;
             background-color: white;
-            padding: 2rem;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            overflow: hidden; /* Empêche les débordements */
+        }
+        .logo-ref-block:hover {
+            border-color: #549e39;
         }
         
-        .login-input {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Georgia', serif;
+        /* L'image peut maintenant prendre 100% de la hauteur du conteneur */
+        .logo-ref-block img,
+        .logo-ref-block svg {
+            max-height: 100%; 
+            max-width: 95%; 
+            width: auto;
+            object-fit: contain; 
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+        .logo-ref-block:hover img,
+        .logo-ref-block:hover svg {
+            filter: grayscale(0%);
         }
         
-        .login-btn {
-            background-color: var(--dix-light);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        /* Style spécifique pour le texte dans les placeholders SVG */
+        .logo-ref-block svg text {
+            fill: #405F59; /* brandDark */
             font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
+            font-size: 14px;
             font-weight: 500;
-            width: 100%;
-            transition: background-color 0.2s;
         }
         
-        .login-btn:hover {
-            background-color: #468c2f;
+        /* Style pour les boutons de simulation actif/inactif */
+        .btn-simulation-active {
+            background-color: #405F59 !important;
+            color: white !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
         }
-        
-        .error-msg {
-            color: #d32f2f;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            display: none;
+        .btn-simulation-inactive {
+            background-color: #E0E0E0 !important;
+            color: #405F59 !important;
         }
+
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body class="antialiased">
 
-    <!-- LOGIN OVERLAY -->
-    <div id="login-overlay">
-        <div class="login-box">
-            <div class="mb-4 flex justify-center">
-                <!-- Using an image tag for the logo -->
-                <img src="https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_300,w_300,f_auto,q_auto/1094382/568385_347809.png" alt="Logo" class="w-16 h-16 object-contain">
-            </div>
-            <h2 class="font-oswald text-xl text-dix-dark mb-2 uppercase">Accès Restreint</h2>
-            <p class="text-sm text-gray-500 mb-4 font-georgia">Veuillez entrer le mot de passe pour accéder à la restitution.</p>
-            <input type="password" id="password-input" class="login-input" placeholder="Mot de passe">
-            <button onclick="checkPassword()" class="login-btn">Entrer</button>
-            <p id="login-error" class="error-msg font-georgia">Mot de passe incorrect</p>
+    <!-- Hero Section -->
+    <header class="pt-4 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <div class="inline-block border border-brandDark px-4 py-1 mb-6 text-sm tracking-widest uppercase font-display text-brandDark">
+            Restauration Collective Publique
         </div>
-    </div>
-
-    <!-- HEADER & NAVIGATION -->
-    <header class="bg-dix-dark text-dix-white flex-none h-16 shadow-md z-20 flex items-center justify-between px-6 border-b border-dix-light">
-        <div class="flex items-center gap-3">
-            <!-- Modified logo container: w-12 h-12 (48px) with padding -->
-            <div class="bg-white rounded-full flex items-center justify-center w-12 h-12 shadow-sm p-1.5 overflow-hidden">
-                <!-- Using w-full h-full object-contain to fit perfectly inside the padded container -->
-                <img src="https://custom-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_300,w_300,f_auto,q_auto/1094382/568385_347809.png" alt="Logo" class="w-full h-full object-contain">
-            </div>
-            <div>
-                <h1 class="font-oswald uppercase text-xl tracking-wide leading-none">Commission Stratégie et gouvernance de L'ILOCC</h1>
-                <p class="text-[10px] font-georgia italic opacity-70">restitution atelier #1 _ Rôle de L'ILOCC </p>
-            </div>
-        </div>
-
-        <nav class="flex h-full">
-            <button onclick="switchTab('acteurs')" id="nav-acteurs" class="nav-tab active h-full px-6 flex items-center gap-2 font-oswald uppercase tracking-wider text-sm">
-                <i data-lucide="users" class="w-4 h-4"></i> Acteurs
-            </button>
-            <button onclick="switchTab('matrice')" id="nav-matrice" class="nav-tab h-full px-6 flex items-center gap-2 font-oswald uppercase tracking-wider text-sm">
-                <i data-lucide="table" class="w-4 h-4"></i> Matrice
-            </button>
-            <button onclick="switchTab('filiere')" id="nav-filiere" class="nav-tab h-full px-6 flex items-center gap-2 font-oswald uppercase tracking-wider text-sm">
-                <i data-lucide="git-merge" class="w-4 h-4"></i> Filière
-            </button>
-            <!-- NOUVEL ONGLET ATTENTES (Déplacé ici) -->
-            <button onclick="switchTab('attentes')" id="nav-attentes" class="nav-tab h-full px-6 flex items-center gap-2 font-oswald uppercase tracking-wider text-sm">
-                <i data-lucide="message-circle" class="w-4 h-4"></i> Attentes
-            </button>
-            <button onclick="switchTab('vision')" id="nav-vision" class="nav-tab h-full px-6 flex items-center gap-2 font-oswald uppercase tracking-wider text-sm">
-                <i data-lucide="eye" class="w-4 h-4"></i> Vision
-            </button>
-        </nav>
-
-        <div class="flex items-center gap-4">
-             <!-- LOGO PARTENAIRE AJOUTÉ ICI -->
-             <div class="bg-white px-2 py-1 rounded-sm h-10 flex items-center">
-                <img src="https://s1.qwant.com/thumbr/474x291/1/9/e8aeac262408d406ecfacd9722f4460c8aa71a535f6b15d1c19a2bb3eaac65/OIP.mUtWo78bQKMYh4JUNUJH6AHaEj.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%2Fid%2FOIP.mUtWo78bQKMYh4JUNUJH6AHaEj%3Fpid%3DApi&q=0&b=1&p=0&a=0" alt="Partenaire" class="h-full w-auto object-contain">
-             </div>
-             <button onclick="toggleLexicon(true)" class="flex items-center gap-2 text-xs font-oswald uppercase opacity-80 hover:opacity-100 hover:text-dix-light transition-colors">
-                <i data-lucide="book" class="w-4 h-4"></i> Lexique
-            </button>
+        <!-- AJOUT DE font-display À CETTE LIGNE POUR FORCER OSWALD -->
+        <h1 class="text-5xl md:text-7xl text-brandDark mb-8 leading-tight font-display">
+            Diagnostic Stratégique <br><span class="text-brandLight">EGALIM</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-brandDark max-w-3xl mx-auto mb-12 leading-relaxed">
+            Un plan d'achats opérationnel en <span class="font-bold border-b-2 border-brandLight">10 jours</span> pour transformer vos obligations réglementaires en levier de performance.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-6">
+            <!-- Remplacement par un lien <a> pour fiabiliser le scroll -->
+            <a href="#offre" class="bg-brandLight text-white px-8 py-4 text-xl shadow-lg hover:bg-brandDark transition transform hover:-translate-y-1 btn-text flex items-center justify-center">
+                Découvrir l'Offre
+            </a>
+            <a href="#simulation" class="bg-transparent border-2 border-brandDark text-brandDark px-8 py-4 text-xl hover:bg-brandDark hover:text-white transition btn-text flex items-center justify-center">
+                Voir la Simulation
+            </a>
         </div>
     </header>
 
-    <!-- MODAL LEXIQUE (Global) -->
-    <div id="lexicon-modal" class="fixed inset-0 z-50 bg-[#405F59] bg-opacity-50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col border border-dix-dark">
-            <div class="p-4 border-b border-[#549e39] flex justify-between items-center bg-[#f3f3f3]">
-                <h3 class="font-oswald uppercase text-xl flex items-center gap-2 text-dix-dark font-normal">
-                    <i data-lucide="book" class="w-5 h-5 text-dix-light"></i>
-                    Lexique & Acronymes
-                </h3>
-                <button onclick="toggleLexicon(false)" class="p-1 hover:bg-gray-200 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-5 h-5 text-dix-dark"></i>
+    <!-- Context Section -->
+    <section id="contexte" class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl text-brandDark mb-4">Vos Défis Actuels</h2>
+                <div class="w-24 h-1 bg-brandLight mx-auto mb-6"></div>
+                <p class="text-lg text-brandDark max-w-2xl mx-auto">
+                    Trois points de blocage majeurs identifiés dans les collectivités.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Card 1 -->
+                <div class="bg-gray-50 p-10 border-t-4 border-brandDark card-hover cursor-pointer" onclick="toggleCard(1)">
+                    <div class="mb-6 text-brandLight">
+                        <i class="fas fa-balance-scale text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl text-brandDark mb-4">Conformité Complexe</h3>
+                    <p class="text-brandDark mb-4 text-lg leading-relaxed" id="text-1-short">
+                        Difficulté à calculer les taux réels (50% EGALIM / 20% Bio) et à fiabiliser la télédéclaration.
+                    </p>
+                    <div id="text-1-long" class="hidden pt-4 mt-4 border-t border-gray-200">
+                        <p class="text-brandLight font-bold mb-2">NOTRE RÉPONSE :</p>
+                        <p>Classification experte de 100% de vos lignes d'achats.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gray-50 p-10 border-t-4 border-brandLight card-hover cursor-pointer" onclick="toggleCard(2)">
+                    <div class="mb-6 text-brandLight">
+                        <i class="fas fa-coins text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl text-brandDark mb-4">Risque Budgétaire</h3>
+                    <p class="text-brandDark mb-4 text-lg leading-relaxed" id="text-2-short">
+                        Crainte que l'augmentation de la qualité ne fasse exploser le coût matière par repas.
+                    </p>
+                    <div id="text-2-long" class="hidden pt-4 mt-4 border-t border-gray-200">
+                        <p class="text-brandLight font-bold mb-2">NOTRE RÉPONSE :</p>
+                        <p>Scénarios chiffrés "Coût/Bénéfice" pour financer le Bio par l'optimisation.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-gray-50 p-10 border-t-4 border-brandDark card-hover cursor-pointer" onclick="toggleCard(3)">
+                    <div class="mb-6 text-brandLight">
+                        <i class="fas fa-eye-slash text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl text-brandDark mb-4">Opacité</h3>
+                    <p class="text-brandDark mb-4 text-lg leading-relaxed" id="text-3-short">
+                        Manque de visibilité sur les familles de produits, leur niveau de transformation et la conformité des titulaires de marché.
+                    </p>
+                    <div id="text-3-long" class="hidden pt-4 mt-4 border-t border-gray-200">
+                        <p class="text-brandLight font-bold mb-2">NOTRE RÉPONSE :</p>
+                        <p>Audit de performance complet incluant la vérification de la conformité du titulaire du marché aux engagements EGALIM.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodologie" class="bg-brandBg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl text-brandDark mb-2">Méthodologie : Sprint 10 Jours</h2>
+                <div class="w-24 h-1 bg-brandLight mx-auto mt-4"></div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-12">
+                <!-- Les classes step-inactive et hover:bg-gray-100 sont ajoutées pour le comportement souhaité -->
+                <!-- Jours 1-2 (COLLECTE) -->
+                <button onclick="setPhase(1)" id="btn-phase-1" class="w-full md:w-auto px-8 py-4 border transition step-active step-inactive text-left md:text-center hover:bg-gray-100">
+                    <span class="block text-xs uppercase opacity-70 font-sans">Jours 1-2</span>
+                    <span class="font-display text-xl">COLLECTE</span>
+                </button>
+                <div class="hidden md:block w-8 h-px bg-brandDark"></div>
+                <!-- Jours 3-5 (DIAGNOSTIC) -->
+                <button onclick="setPhase(2)" id="btn-phase-2" class="w-full md:w-auto px-8 py-4 border transition step-inactive text-left md:text-center hover:bg-gray-100">
+                    <span class="block text-xs uppercase opacity-70 font-sans">Jours 3-5</span>
+                    <span class="font-display text-xl">DIAGNOSTIC</span>
+                </button>
+                <div class="hidden md:block w-8 h-px bg-brandDark"></div>
+                <!-- Jours 6-8 (STRATÉGIE) -->
+                <button onclick="setPhase(3)" id="btn-phase-3" class="w-full md:w-auto px-8 py-4 border transition step-inactive text-left md:text-center hover:bg-gray-100">
+                    <span class="block text-xs uppercase opacity-70 font-sans">Jours 6-8</span>
+                    <span class="font-display text-xl">STRATÉGIE</span>
+                </button>
+                <div class="hidden md:block w-8 h-px bg-brandDark"></div>
+                <!-- Jours 9-10 (RESTITUTION) -->
+                <button onclick="setPhase(4)" id="btn-phase-4" class="w-full md:w-auto px-8 py-4 border transition step-inactive text-left md:text-center hover:bg-gray-100">
+                    <span class="block text-xs uppercase opacity-70 font-sans">Jours 9-10</span>
+                    <span class="font-display text-xl">RESTITUTION</span>
                 </button>
             </div>
-            <div id="lexicon-content" class="overflow-y-auto p-6 space-y-4 font-georgia bg-white">
-                <!-- Lexicon items will be injected here -->
-            </div>
-            <div class="p-4 bg-[#f3f3f3] border-t border-[#549e39] text-center text-xs text-dix-dark opacity-60 font-oswald uppercase">
-                Définitions contextuelles à la filière laitière corse
+
+            <div class="bg-white p-10 md:p-14 border border-brandDark shadow-xl transition-all duration-300" id="phase-content">
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- MAIN CONTAINER FOR TABS -->
-    <div class="flex-1 relative overflow-hidden bg-dix-white">
-        
-        <!-- ONGLET 1: ACTEURS (D.I.X. MASTER-DETAIL) -->
-        <div id="tab-acteurs" class="tab-pane absolute inset-0 flex">
-            <!-- SIDEBAR ACTEURS -->
-            <div class="w-1/3 min-w-[300px] bg-white border-r border-[#549e39]/30 flex flex-col shadow-sm z-10">
-                <!-- Header Sidebar -->
-                <div class="p-6 border-b border-[#549e39]/30 bg-[#f3f3f3]">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-xl font-oswald uppercase font-normal flex items-center gap-2 text-dix-dark">
-                                <i data-lucide="list" class="w-5 h-5 text-dix-light"></i>
-                                Liste des Structures
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Search & Filter -->
-                <div class="p-4 bg-[#f3f3f3] border-b border-[#549e39]/30 space-y-3">
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-dix-dark opacity-40"></i>
-                        <input 
-                            type="text" 
-                            id="search-input"
-                            placeholder="Rechercher une structure..." 
-                            class="w-full pl-9 pr-4 py-2 text-sm border border-dix-dark/20 focus:outline-none focus:ring-1 focus:ring-[#549e39] transition-all bg-white font-georgia text-dix-dark placeholder-dix-dark/50"
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <label class="flex items-center gap-2 text-sm text-dix-dark cursor-pointer select-none font-georgia">
-                            <input type="checkbox" id="filter-member" class="accent-[#549e39]">
-                            Membres ILOCC uniquement
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Actor List -->
-                <div id="actor-list" class="flex-1 overflow-y-auto p-2 space-y-1 bg-white">
-                    <!-- Actors will be injected here -->
-                </div>
+    <!-- Simulation Dashboard -->
+    <section id="simulation" class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl text-brandDark mb-2">Simulation des Résultats</h2>
+                <div class="w-24 h-1 bg-brandLight mx-auto mt-4"></div>
+                <p class="text-lg text-brandDark max-w-2xl mx-auto mt-4">
+                    Visualisez l'impact de notre stratégie sur vos indicateurs clés.
+                </p>
             </div>
 
-            <!-- MAIN CONTENT ACTEURS -->
-            <div id="main-content" class="flex-1 overflow-y-auto bg-[#f3f3f3] p-8">
-                <!-- Actor details will be injected here -->
-                <div class="h-full flex items-center justify-center text-dix-dark opacity-30 font-georgia italic">
-                    Sélectionnez une structure pour voir les détails
-                </div>
-            </div>
-        </div>
-
-        <!-- ONGLET 2: MATRICE (Refonte complète D.I.X.) -->
-        <div id="tab-matrice" class="tab-pane absolute inset-0 hidden p-8 bg-[#fdfbf7] flex flex-col h-full overflow-hidden">
-            <div class="mb-6 flex-none">
-                <h2 class="font-oswald text-3xl text-dix-dark uppercase font-normal tracking-wide">Matrice des Responsabilités</h2>
-                <p class="font-georgia text-dix-dark opacity-60 italic mt-1">Synthèse des positionnements des acteurs par grand domaine d'action</p>
-            </div>
-            
-            <div class="flex-1 overflow-auto bg-white border border-dix-light/30 shadow-sm relative matrix-container">
-                <table class="w-full min-w-[1000px]">
-                    <thead>
-                        <tr>
-                            <th class="w-64">Structure</th>
-                            <th>Représentation</th>
-                            <th>Gouvernance</th>
-                            <th>Technique</th>
-                            <th>Sanitaire / Qualité</th>
-                            <th>Économie / Marché</th>
-                        </tr>
-                    </thead>
-                    <tbody id="matrix-body">
-                        <!-- Injected via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ONGLET 3: FILIÈRE (Interactive Graph) -->
-        <div id="tab-filiere" class="tab-pane absolute inset-0 hidden overflow-auto p-8 bg-[#fdfbf7]">
-             <!-- Modification ici : min-h-full pour permettre l'expansion et grand padding-bottom (pb-48) -->
-             <div class="space-y-12 min-h-full pb-48"> 
-            
-                <div class="flex justify-center">
-                    <div class="flex flex-col items-center text-center">
-                        <div id="hub-ilocc" 
-                             onmouseover="highlightInterproMembers()" 
-                             onmouseout="clearMemberHighlight()"
-                             onclick="selectAndGo(1)" 
-                             class="w-64 h-32 bg-white rounded border-4 border-[#549e39] shadow-lg flex flex-col items-center justify-center text-center p-4 node-base z-50"> <!-- Increased size -->
-                            <div class="actor-icon-strip">⚖️<br>⚙️</div>
-                            <span class="text-2xl font-oswald text-dix-dark leading-tight uppercase">ILOCC</span>
-                            <p class="key-term text-[#549e39] font-bold uppercase text-[12px]">Gouvernance & Stratégie</p>
-                        </div>
-                        <p class="text-[11px] text-[#549e39] mt-2 italic animate-pulse text-center font-georgia">Survolez l'ILOCC pour voir ses membres</p>
-                    </div>
-                </div>
-    
-                <div class="filiere-grid">
-                    <!-- Headers -->
-                    <div style="grid-row: 1; grid-column: 1;"></div>
-                    <div class="col-header" style="grid-row: 1; grid-column: 2;">Génétique</div>
-                    <div class="col-header" style="grid-row: 1; grid-column: 3;">Sanitaire</div>
-                    <div class="col-header" style="grid-row: 1; grid-column: 4;">Transformation</div>
-                    <div class="col-header" style="grid-row: 1; grid-column: 5;">Qualité</div>
-                    <div class="col-header" style="grid-row: 1; grid-column: 6;">Promotion / Com</div>
-    
-                    <!-- Row 2: Filière Ovine -->
-                    <div class="row-header header-ovine" style="grid-row: 2; grid-column: 1;">Filière Ovine</div>
-                    <div class="amont-block flex flex-col gap-2" style="grid-row: 2; grid-column: 2;">
-                        <div onclick="selectAndGo(7)" class="node-base"><div class="actor-icon-strip">🐑</div><span class="font-bold text-[15px] uppercase font-oswald">OS CORSE</span><p class="key-term text-[13px]">Sélection race</p></div>
-                        <div onclick="selectAndGo(8)" class="node-base"><div class="actor-icon-strip">🐑</div><span class="font-bold text-[15px] uppercase text-center leading-tight font-oswald">CORSIA</span><p class="key-term text-[13px] text-center">IA & Béliers</p></div>
-                    </div>
-                    <div style="grid-row: 2; grid-column: 3;"></div>
-                    <div class="aval-block flex items-center" style="grid-row: 2; grid-column: 4;">
-                        <div onclick="selectAndGo(3)" class="node-base w-full border-red-100 is-interpro-member"><span class="member-indicator">★</span><div class="actor-icon-strip">🥩<br>🐑</div><span class="font-bold text-[15px] uppercase font-oswald">SCA AGNELLU</span><p class="key-term text-red-800 text-center text-[13px]">Abattage & Valo</p></div>
-                    </div>
-                    <div class="aval-block flex flex-col gap-2" style="grid-row: 2; grid-column: 5;">
-                        <!-- ODG BROCCIU removed here -->
-                        <div onclick="selectAndGo(4)" class="node-base border-blue-300 is-interpro-member"><span class="member-indicator">★</span><div class="actor-icon-strip">🥩</div><span class="font-bold text-[14px] uppercase leading-tight font-oswald">AREO</span><p class="key-term text-center leading-tight text-left text-[13px]">IGP Agneau</p></div>
-                    </div>
-                    <div class="aval-block flex items-center" style="grid-row: 2; grid-column: 6;">
-                        <div onclick="selectAndGo(4)" class="node-base w-full border-blue-300 text-center is-interpro-member"><span class="member-indicator">★</span><div class="actor-icon-strip">🥩</div><span class="font-bold text-[15px] uppercase font-oswald">AREO</span><p class="key-term text-center text-left text-[13px]">Mise en marché</p></div>
-                    </div>
-    
-                    <!-- Row 3: Zone Transversale -->
-                    <div class="header-pivot">TRANSVERSAL</div>
-                    <div class="amont-block flex items-center" style="grid-row: 3; grid-column: 3;">
-                        <div onclick="selectAndGo(10)" class="node-base w-full border-red-200 shadow-sm"><div class="actor-icon-strip">🛡️</div><span class="font-bold text-[15px] uppercase text-red-900 leading-tight font-oswald">GDS</span><p class="key-term font-bold text-red-700 text-center text-[13px]">Expertise Sanitaire</p></div>
-                    </div>
-                    <div class="aval-block flex items-center" style="grid-row: 3; grid-column: 4;">
-                        <div onclick="selectAndGo(6)" class="node-base w-full border-amber-300 bg-amber-50/30"><div class="actor-icon-strip">🧀<br>🥛</div><span class="font-bold text-[14px] uppercase text-amber-900 font-oswald">CASGIU CASANU</span><p class="key-term text-[13px] text-center">Transfo. Fermière</p></div>
-                    </div>
-                    <div class="aval-block flex items-center" style="grid-row: 3; grid-column: 5;">
-                        <div onclick="selectAndGo(12)" class="node-base w-full border-blue-400 bg-blue-50/20 shadow-md"><div class="actor-icon-strip">🧀<br>🐑<br>🐐</div><span class="font-bold text-[15px] uppercase text-blue-900 leading-tight font-oswald">ODG BROCCIU</span><p class="key-term text-blue-700 font-bold text-center text-[13px]">Garant AOP</p></div>
-                    </div>
-                    <div class="aval-block flex items-center" style="grid-row: 3; grid-column: 6;">
-                        <div onclick="selectAndGo(6)" class="node-base w-full border-amber-300 bg-amber-50/30"><div class="actor-icon-strip">🧀<br>🥛</div><span class="font-bold text-[14px] uppercase text-amber-900 font-oswald">CASGIU CASANU</span><p class="key-term text-[13px] text-center">Promotion fermière</p></div>
-                    </div>
-    
-                    <!-- Row 4: Filière Caprine -->
-                    <div class="row-header header-caprine" style="grid-row: 4; grid-column: 1;">Filière Caprine</div>
-                    <div class="amont-block flex items-center" style="grid-row: 4; grid-column: 2;">
-                        <div onclick="selectAndGo(9)" class="node-base w-full text-center is-interpro-member"><span class="member-indicator">★</span><div class="actor-icon-strip">🐐</div><span class="font-bold text-[15px] uppercase font-oswald">ASSOC. CAPRAGHJI</span><p class="key-term text-center text-[13px]">Schéma sélection</p></div>
-                    </div>
-                    <div style="grid-row: 4; grid-column: 3;"></div>
-                    <div style="grid-row: 4; grid-column: 4;"></div>
-                    <div class="aval-block flex items-center" style="grid-row: 4; grid-column: 5;">
-                        <div onclick="selectAndGo(9)" class="node-base w-full border-blue-300 is-interpro-member text-center"><span class="member-indicator">★</span><div class="actor-icon-strip">🥩</div><span class="font-bold text-[15px] uppercase font-oswald">ASSOC. CAPRAGHJI</span><p class="key-term text-center text-[13px]">IGP Cabri</p></div>
-                    </div>
-                    <div class="aval-block flex items-center" style="grid-row: 4; grid-column: 6;">
-                        <div onclick="selectAndGo(9)" class="node-base w-full border-blue-300 text-center is-interpro-member"><span class="member-indicator">★</span><div class="actor-icon-strip">🐐</div><span class="font-bold text-[15px] uppercase font-black text-blue-900 font-oswald">ASSOC. CAPRAGHJI</span><p class="key-term text-blue-700 text-center text-[13px]">Promotion</p></div>
-                    </div>
-                </div>
-    
-                <!-- Support & Représentation -->
-                <!-- Modification ici : suppression de mb-32 sur le grid car inutile avec le spacer -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12 pt-8 border-t-2 border-gray-200">
-                    <div>
-                        <span class="font-oswald uppercase text-sm tracking-widest text-amber-700 mb-4 block">Représentation & Défense</span>
-                        <div class="flex flex-wrap gap-3">
-                            <div onclick="selectAndGo(2)" class="node-base w-48 bg-gray-50/50 min-h-0 py-2 is-interpro-member"><span class="member-indicator">★</span><span class="font-bold text-[13px] uppercase font-oswald">GPC</span><p class="key-term text-[11px]">Revenu des éleveurs</p></div>
-                            <div onclick="selectAndGo(5)" class="node-base w-48 bg-gray-50/50 min-h-0 py-2 is-interpro-member"><span class="member-indicator">★</span><span class="font-bold text-[13px] uppercase font-oswald">U CASGILE</span><p class="key-term text-[11px]">Défense OCC</p></div>
-                            <div onclick="selectAndGo(11)" class="node-base w-48 bg-amber-50/50 min-h-0 py-2 border-amber-200 is-interpro-member"><span class="member-indicator">★</span><span class="font-bold text-[12px] uppercase leading-tight font-oswald">ASSOC. TRANSFORMATEURS</span><p class="key-term text-[10px]">Défense industrielle</p></div>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="font-oswald uppercase text-sm tracking-widest text-purple-700 mb-4 block">Support, Financement & Institutionnel</span>
-                        <div class="flex flex-wrap gap-3">
-                            <div onclick="selectAndGo(14)" class="node-base w-48 border-purple-200 min-h-0 py-2 text-center"><span class="font-bold text-[15px] uppercase font-oswald">ODARC</span><p class="key-term text-[13px]">Financement & PAC</p></div>
-                            <div onclick="selectAndGo(13)" class="node-base w-48 border-purple-200 min-h-0 py-2 text-center"><span class="font-bold text-[15px] uppercase leading-tight font-oswald">CHAMBRE D'AGRICULTURE</span><p class="key-term text-[13px]">Accompagnement terrain</p></div>
-                            <div onclick="selectAndGo(15)" class="node-base w-48 border-purple-200 min-h-0 py-2 text-center"><span class="font-bold text-[15px] uppercase font-oswald">FRANCEAGRIMER</span><p class="key-term text-[13px]">Tutelle de l'État</p></div>
-                        </div>
-                    </div>
-                </div>
+            <!-- RESTAURATION STRUCTURE 2 COLONNES -->
+            <!-- items-start a été remplacé par items-center pour aligner verticalement les deux colonnes -->
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 
-                <!-- AJOUT DU SPACER -->
-                <div class="h-40 w-full"></div>
-            </div>
-        </div>
-
-        <!-- NOUVEL ONGLET: ATTENTES (Analyse détaillée) -->
-        <div id="tab-attentes" class="tab-pane absolute inset-0 hidden overflow-auto p-8 bg-[#fdfbf7]">
-            <div class="space-y-10 max-w-6xl mx-auto">
-                <div class="mb-6 flex-none border-l-4 border-[#549e39] pl-6 py-2">
-                    <h2 class="font-oswald text-3xl text-dix-dark uppercase font-normal tracking-wide">Analyse des Attentes</h2>
-                    <p class="font-georgia text-dix-dark opacity-60 italic mt-1">Synthèse détaillée et comparative des demandes exprimées par chaque acteur vis-à-vis de l'ILOCC.</p>
-                </div>
-
-                <!-- Analyse Sémantique (Dynamique) -->
-                <div class="bg-white rounded border border-dix-light/30 p-6 shadow-sm">
-                    <h3 class="font-oswald uppercase text-dix-dark text-sm tracking-widest mb-4 flex items-center gap-2">
-                        <i data-lucide="tag" class="w-4 h-4 text-[#549e39]"></i>
-                        Mots-clés récurrents dans les attentes
-                    </h3>
-                    <div id="attentes-keywords" class="flex flex-wrap gap-3">
-                        <!-- Injected via JS -->
+                <!-- COLONNE 1 (GAUCHE) : Descriptif -->
+                <div class="col-span-1">
+                    <h3 class="text-3xl text-brandDark mt-2 mb-6 font-display">Outils de pilotage</h3>
+                    <p class="text-lg text-brandDark mb-8 leading-relaxed">
+                        Nous ne vous livrons pas seulement un rapport, mais des outils de pilotage visuels pour comprendre vos leviers d'économies.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-5">
+                            <div class="text-brandLight mt-1">
+                                <i class="fas fa-chart-pie text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl text-brandDark mb-1 font-display">Bilan de Conformité</h4>
+                                <p class="text-brandDark opacity-80">Visualisation claire des écarts par rapport aux objectifs EGALIM.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-5">
+                            <div class="text-brandLight mt-1">
+                                <i class="fas fa-euro-sign text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl text-brandDark mb-1 font-display">Projection Budgétaire</h4>
+                                <p class="text-brandDark opacity-80">Comparaison du coût actuel vs coût optimisé.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-5">
+                            <div class="text-brandLight mt-1">
+                                <i class="fas fa-boxes text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl text-brandDark mb-1 font-display">Ventilation des Produits</h4>
+                                <p class="text-brandDark opacity-80">Démonstration de la réallocation des volumes d'achats vers les familles de produits durables.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Liste détaillée par catégorie -->
-                <div id="attentes-container" class="space-y-12 pb-20">
-                    <!-- Injected via JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- ONGLET 5: VISION (Restored with Content) -->
-        <div id="tab-vision" class="tab-pane absolute inset-0 hidden overflow-auto p-8 bg-[#fdfbf7]">
-            <div class="max-w-7xl mx-auto h-full flex flex-col">
-                <div class="mb-6 flex-none border-l-4 border-[#549e39] pl-6 py-2">
-                    <h2 class="font-oswald text-3xl text-dix-dark uppercase font-normal tracking-wide">Vision Stratégique & Prospective</h2>
-                    <p class="font-georgia text-dix-dark opacity-60 italic mt-1">Synthèse des axes prioritaires pour le mandat 2026</p>
-                </div>
-
-                <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-0">
-                    <!-- COLONNE GAUCHE : RADAR -->
-                    <div class="bg-white border border-dix-light/30 shadow-sm p-6 flex flex-col items-center justify-center relative rounded-sm">
-                        <h3 class="font-oswald uppercase text-dix-dark text-sm tracking-widest mb-2 w-full text-left flex items-center gap-2">
-                            <i data-lucide="radar" class="w-4 h-4 text-[#549e39]"></i>
-                            Cartographie des priorités
-                        </h3>
-                        <div class="w-full h-full max-h-[500px] flex items-center justify-center">
-                            <canvas id="expectationsRadar"></canvas>
+                <!-- COLONNE 2 (DROITE) : Graphiques Interactifs -->
+                <div class="bg-brandBg p-8 border border-brandDark col-span-1">
+                    <div class="mb-6 flex justify-between items-center border-b border-brandDark pb-4">
+                        <h3 class="font-display text-xl text-brandDark">Outils de pilotage</h3>
+                        <div class="flex gap-2">
+                            <button id="btn-initial" onclick="updateCharts('initial')" class="text-xs font-display uppercase tracking-wider px-3 py-2 transition btn-simulation-active">Situation Initiale</button>
+                            <button id="btn-optimized" onclick="updateCharts('optimized')" class="text-xs font-display uppercase tracking-wider px-3 py-2 transition btn-simulation-inactive">Après Stratégie</button>
                         </div>
                     </div>
 
-                    <!-- COLONNE DROITE : SYNTHESE -->
-                    <div class="space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+                    <div class="grid gap-6">
+                         <!-- Chart 1: Compliance (Full width) -->
+                        <div class="bg-white p-4 border border-gray-200">
+                            <!-- Titre h4 retiré car dupliqué par Chart.js -->
+                            <div class="chart-container chart-container-small">
+                                <canvas id="complianceChart"></canvas>
+                            </div>
+                        </div>
                         
-                        <!-- Axe 1 -->
-                        <div class="bg-white p-5 border-l-4 border-[#549e39] shadow-sm hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start">
-                                <h4 class="font-oswald uppercase text-lg text-dix-dark">1. Coordination & Chef de File</h4>
-                                <span class="text-xs font-bold text-[#549e39] bg-[#549e39]/10 px-2 py-1 rounded">Priorité #1</span>
+                        <!-- Chart 2: Cost Analysis (Full width) -->
+                        <div class="bg-white p-4 border border-gray-200">
+                            <!-- Titre h4 retiré car dupliqué par Chart.js -->
+                            <div class="chart-container chart-container-small">
+                                <canvas id="costChart"></canvas>
                             </div>
-                            <p class="text-sm font-georgia text-dix-dark opacity-80 mt-2 leading-relaxed">
-                                L'attente majeure est un pilotage fort. L'ILOCC doit sortir de son rôle d'observateur pour devenir le <strong>chef d'orchestre</strong> opérationnel, assurant la cohérence entre l'amont (sélection, sanitaire) et l'aval (transformation, marché).
-                            </p>
                         </div>
-
-                        <!-- Axe 2 -->
-                        <div class="bg-white p-5 border-l-4 border-dix-dark shadow-sm hover:shadow-md transition-shadow">
-                            <h4 class="font-oswald uppercase text-lg text-dix-dark">2. Gouvernance Partagée</h4>
-                            <p class="text-sm font-georgia text-dix-dark opacity-80 mt-2 leading-relaxed">
-                                Mise en place d'une prise de décision collégiale mais capable d'arbitrages fermes. Nécessité de structurer les collèges pour équilibrer les pouvoirs entre producteurs, transformateurs et institutionnels.
-                            </p>
+                        
+                        <!-- Chart 3: Family Volume (Barres empilées) -->
+                        <div class="bg-white p-4 border border-gray-200">
+                            <!-- Titre h4 retiré car dupliqué par Chart.js -->
+                            <div class="chart-container">
+                                <canvas id="familyVolumeChart"></canvas>
+                            </div>
                         </div>
-
-                        <!-- Axe 3 -->
-                        <div class="bg-white p-5 border-l-4 border-amber-600 shadow-sm hover:shadow-md transition-shadow">
-                            <h4 class="font-oswald uppercase text-lg text-dix-dark">3. Observatoire Économique</h4>
-                            <p class="text-sm font-georgia text-dix-dark opacity-80 mt-2 leading-relaxed">
-                                Besoin crucial de transparence sur les données (volumes, prix, coûts de production). L'ILOCC doit devenir le tiers de confiance qui objective la réalité économique de la filière.
-                            </p>
-                        </div>
-
-                        <!-- Axe 4 -->
-                        <div class="bg-white p-5 border-l-4 border-blue-600 shadow-sm hover:shadow-md transition-shadow">
-                            <h4 class="font-oswald uppercase text-lg text-dix-dark">4. Défense & Spécificité</h4>
-                            <p class="text-sm font-georgia text-dix-dark opacity-80 mt-2 leading-relaxed">
-                                Protection des races locales et des savoir-faire fermiers. Porter une voix unique auprès des instances nationales (INAO, Ministère) pour défendre les dérogations et adaptations nécessaires à la Corse.
-                            </p>
-                        </div>
-
-                        <!-- Axe 5 -->
-                        <div class="bg-white p-5 border-l-4 border-purple-600 shadow-sm hover:shadow-md transition-shadow">
-                            <h4 class="font-oswald uppercase text-lg text-dix-dark">5. Veille Sanitaire & Qualité</h4>
-                            <p class="text-sm font-georgia text-dix-dark opacity-80 mt-2 leading-relaxed">
-                                Assurer une veille réglementaire et sanitaire constante pour anticiper les crises (FCO, etc.) et garantir la qualité des produits laitiers corses, socle de la valeur ajoutée.
-                            </p>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // --- NAVIGATION LOGIC ---
-        function switchTab(tabId) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
-            // Show selected tab
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
+    <!-- References -->
+    <section id="references" class="bg-brandDark text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl text-white mb-12">Ils nous font confiance</h2>
             
-            // Update Nav State
-            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-' + tabId).classList.add('active');
-
-            if(tabId === 'vision') setTimeout(initChart, 50);
-            if(tabId === 'matrice') renderMatrix();
-            if(tabId === 'attentes') renderAttentes();
-        }
-
-        function selectAndGo(actorId) {
-            switchTab('acteurs');
-            selectActor(actorId);
-        }
-
-        // --- PASSWORD PROTECTION ---
-        function checkPassword() {
-            const password = document.getElementById('password-input').value;
-            const errorMsg = document.getElementById('login-error');
-            
-            // Mot de passe : ILOCC2026
-            if(password === "ILOCC2026") {
-                document.getElementById('login-overlay').style.display = 'none';
-            } else {
-                errorMsg.style.display = 'block';
-            }
-        }
-
-        // Allow pressing Enter to login
-        document.getElementById('password-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
-        // --- DATA (ENRICHED WITH CATEGORY FOR ANALYSIS) ---
-        const lexiconData = [
-            { term: "AOP", def: "Appellation d'Origine Protégée. Signe européen garantissant qu'un produit est réalisé selon un savoir-faire reconnu dans une même zone géographique (ex: Brocciu)." },
-            { term: "IGP", def: "Indication Géographique Protégée. Signe identifiant un produit agricole dont la qualité, la réputation ou d'autres caractéristiques sont liées à son origine géographique." },
-            { term: "CVO", def: "Cotisation Volontaire Obligatoire. Contribution financière versée par les membres d'une interprofession pour financer des actions communes (communication, R&D, etc.)." },
-            { term: "ODG", def: "Organisme de Défense et de Gestion. Structure qui rédige le cahier des charges d'un signe de qualité (AOP/IGP) et s'assure de son respect." },
-            { term: "OS", def: "Organisme de Sélection. Structure agréée chargée de définir et de conduire le programme d'amélioration génétique d'une race (ici Brebis Corse)." },
-            { term: "GDS", def: "Groupement de Défense Sanitaire. Association d'éleveurs dédiée à l'amélioration de la santé des troupeaux et la lutte contre les maladies." },
-            { term: "FEADER", def: "Fonds Européen Agricole pour le Développement Rural. Instrument financier de la politique européenne de développement rural." },
-            { term: "PAC", def: "Politique Agricole Commune. Politique mise en œuvre par l'Union européenne pour soutenir l'agriculture." },
-            { term: "CL", def: "Contrôle Laitier. Mesure officielle de la quantité et de la qualité du lait produit par animal, base de la sélection génétique." },
-            { term: "RZUE", def: "Règlement Zootechnique de l'Union Européenne. Cadre légal pour la gestion des races et l'élevage." },
-            { term: "CNAOL", def: "Conseil National des Appellations d'Origine Laitières. Fédère les organismes de défense et de gestion des fromages, beurres et crèmes AOP." },
-            { term: "INAO", def: "Institut National de l'Origine et de la Qualité. Établissement public français chargé du dispositif des signes officiels d'identification de la qualité et de l'origine." },
-            { term: "EPIC", def: "Établissement Public à Caractère Industriel et Commercial. Statut juridique de l'ODARC." },
-            { term: "FAM", def: "FranceAgriMer. Établissement national des produits de l'agriculture et de la mer." }
-        ];
-
-        const data = [
-            {
-                id: 1,
-                intitule: "I.L.O.C.C ",
-                cat: "INTERPROFESSION", // Added category
-                objetSocial: "INTERPROFESSION LAITIERE OVINE ET CAPRINE CORSE",
-                roleOperationnel: [
-                "Change la coordination du plan d’ambition (challenger les partenaires sur les actions inscrites sur 5 ans / signe de qualité agneaux / cabris - sanitaire produit fermier)",
-                "Animation de filière",
-                "Animation de la partie technique (accompagnement sur le terrain des éleveurs)",
-                "Gestion de l’AOP Brocciu",
-                "Gestion des plans d’investissement - achats groupés",
-                "Promotion / communication / mise en avant du laitier et du produit",
-                "Observatoire des prix / laitier",
-                "Relations avec le national - action maccro de la filière",
-                "Convention avec l’institut d’élevage (données techniques laitières et couts de production / qualité du lait avec agrolabs)",
-                "Lien avec les autres interprofessions",
-                "Action de promotion / représenation - au salon"
-                ],
-                attentes: [
-                "Coordination et gestion de la gouvernance de la filière",
-                "Élaborer la stratégie globale définit collectivement / collegiale",
-                "Délégation des sujets auprès des différents partenaires",
-                "Soutient des partenaires dans le cas de prob. / difficultés relevés",
-                "Rôle dans la communication / promotion des produits",
-                "Observatoire des données collectives (vision macro de la filière) / coût de production",
-                "Vision globale sans rentrer dans l’action",
-                "Action veille sanitaire globale (qualité du lait / )",
-                "Défense de la spécificité Corse au niveau des instances nationales",
-                "Atteinte des objectifs définit collectivement (dans la stratégie globale)"
-                ],
-                definitions: "",
-                liens: "AOP BROCCIU",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 2,
-                intitule: "Gruppamente di pastori Corsi (GPC)",
-                cat: "REPRÉSENTATION / SYNDICAT",
-                objetSocial: "Défendre le revenu des éleveurs et soutenir la valorisation de leur production. Représentation, promotion et défense d'intérêts économiques.",
-                roleOperationnel: ["ABS (Absent lors de l'atelier)"],
-                attentes: ["ABS (Absent lors de l'atelier)"],
-                definitions: "",
-                liens: "",
-                qualite: "",
-                membre: true,
-                absent: true
-            },
-            {
-                id: 3,
-                intitule: "SCA AGNELLU E CAPRETTU DI CORSICA / AREO",
-                cat: "TECHNIQUE / COMMERCE",
-                objetSocial: "Collecte, vente, abattage, transformation d'ovins et de caprins.",
-                roleOperationnel: [
-                "Valorisation et le développement de la commercialisation des agneaux de lait",
-                "IGP agneau de lait corse"
-                ],
-                attentes: [
-                "Chef de file (en tête - amener un plan de la filière / par rapport au dossier FAM - chef de file du plan général)",
-                "Coordination avec les autres acteurs de la filière ==> Chef de file gestion dossier IGP",
-                "Centraliser les informations de la filière"
-                ],
-                definitions: "",
-                liens: "",
-                qualite: "IGP AGNEAU DE LAIT",
-                membre: true,
-                absent: false
-            },
-            {
-                id: 4,
-                intitule: "ASSOCIATION RÉGIONALE DES ÉLEVEURS OVINS DE la CORSE (AREO)",
-                cat: "TECHNIQUE / COMMERCE",
-                objetSocial: "Promotion et organisation de l'élevage laitier ainsi que de la production, la mise en marché des produits (agneaux, laine, panse, animaux de réforme), la sélection et le suivi de la race Corse, la certification des produits, la défense sanitaire du cheptel, l'assistance technique, l'approvisionnement et toute opération destinée à améliorer les conditions d'élevage et de commercialisation des productions.",
-                roleOperationnel: [
-                "Valorisation et le développement de la commercialisation des agneaux de lait",
-                "IGP agneau de lait corse",
-                "Mise en marché (Noël, Pâques)",
-                "Gestion des coproduits (Laine, panse, animaux de réforme)",
-                "Approvisionnement (achats groupés)",
-                "Assistance technique et sanitaire (complète l'action GDS/Chambre)"
-                ],
-                attentes: [
-                "Chef de file (en tête - amener un plan de la filière / par rapport au dossier FAM - chef de file du plan général)",
-                "Coordination avec les autres acteurs de la filière ==> Chef de file gestion dossier IGP",
-                "Centraliser les informations de la filière"
-                ],
-                definitions: "Porte le label IGP Agneau de lait Corse (Agneu corsu). Organise la vente (Noël/Pâques) et gère les coproduits (laine, réforme).",
-                liens: "NC",
-                qualite: "IGP AGNEAU DE LAIT",
-                membre: true,
-                absent: false
-            },
-            {
-                id: 5,
-                intitule: "U CASGILE",
-                cat: "PRODUCTEUR / FERMIER",
-                objetSocial: "Promotion et défense de la production et des producteurs de fromages fermiers de Corse, elle a pour vocation la défense et la promotion des éleveurs fermiers installés sur le territoire corse qui transforment eux-mêmes le lait issu de leur propre troupeau, la défense et la promotion des produits des exploitations des éleveurs fermiers de la Corse, la défense des intérêts des éleveurs producteurs fermiers de la Corse au sein de l'Ilocc.",
-                roleOperationnel: ["ABS (Absent lors de l'atelier)"],
-                attentes: ["ABS (Absent lors de l'atelier)"],
-                definitions: "NC",
-                liens: "NC",
-                qualite: "",
-                membre: true,
-                absent: true
-            },
-            {
-                id: 6,
-                intitule: "CASGIU CASANU",
-                cat: "PRODUCTEUR / FERMIER",
-                objetSocial: "Promotion et défense de la production et des producteurs de fromages fermiers de Corse (ovins, caprins, bovins) (elle a pour vocation première de défendre et de promouvoir les fromages fermiers en regroupant tous les éleveurs qui transforment eux-mêmes le lait issu de leurs troupeaux qui sont installés sur le territoire de Corse).",
-                roleOperationnel: [
-                "Défendre / Promouvoir et structurer le métier de berger / fermier",
-                "Assurer la veille sanitaire et réglementaire fromagerie - mais en lien avec GDS quand les problématiques viennent de l’élevage ==> Intervient spécifiquement pour ses adhérents",
-                "Les qst sanitaires en fromagerie au coeur de l’action // Appui sur la chambre",
-                "Faire en sorte que les prod. fermiers soient reconnus comme des véritables pro. (économique)",
-                "Promotion et commercialisation des produits fermiers"
-                ],
-                attentes: [
-                "Coordination et fédération de l’ensemble des structures autour des élevages OCC",
-                "Pas de vocation techniques ou politiques (Ce n’est pas un syndicat / ligne politique particulière)",
-                "Faire émerger des problématiques communes",
-                "Définir des orientations partagées",
-                "Coordonner la mise en œuvre d’actions concrètes réalisées par des acteurs existants",
-                "Assurer suivi et cohérence",
-                "Rassembleur / Coordinateur qui s’appuie sur les compétences existentes"
-                ],
-                definitions: "Défend le modèle 'Fermier' (transforme uniquement son propre lait). Gère le risque 'Lait Cru' et l'application du paquet hygiène.",
-                liens: "GDS",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 7,
-                intitule: "OS CORSE (ORGANISME DE SELECTION FRECSOV)",
-                cat: "TECHNIQUE / GÉNÉTIQUE",
-                objetSocial: "Définir les objectifs de sélection de la race ovine corse en veillant à la gestion de la variabilité génétique et coordonner les actions concourant à l'amélioration génétique de la race ovine corse, définir les caractéristiques de la race ovine corse et les critères d'appartenance à cette population, certifier l'appartenance à la race pure ovine corse et tenir son livre généalogique.",
-                roleOperationnel: [
-                "En charge de la gestion de la race ovine corse",
-                "Définir des objectifs de sélection / mise en place de cette sélection",
-                "Gérer la sélection / progrès attendu / diversité génétique",
-                "Certifier la qualité de la race",
-                "Promotion de la race (Salons Paris, autre...)",
-                "Appui technique sur le contrôle de performance, on s’appuie sur la CA (partenaire sur le progrès génétique)",
-                "En charge du contrôle de performances (RZUE), délégation à la CARC et coordination du CL",
-                "Orientation génétique de la race ovine Corse",
-                "Promotion de la race : instances politiques, bergers, grand public",
-                "En charge de la reconnaissance raciale des animaux",
-                "Sélection génétique modulable en fonction des enjeux, travail au long terme"
-                ],
-                attentes: [
-                "Coordination et fédération de l’ensemble des structures autour des élevages OCC",
-                "Mettre en place les orientations stratégiques de la filière",
-                "OS CORSE devrait répondre à une demande l’ILOCC",
-                "Observatoire des prix de l’activité / transparence des informations sur toute la filière",
-                "Faire émerger les attentes et les besoins de la filière"
-                ],
-                definitions: "Gère le Livre Généalogique et définit les standards de la race. S'appuie sur le Contrôle Laitier (CL) et le RZUE.",
-                liens: "CORSIA\nChambre d'agriculture",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 8,
-                intitule: "CORSIA (COOP DE SELECTION ET INSEMINATION)",
-                cat: "TECHNIQUE / GÉNÉTIQUE",
-                objetSocial: "En charge de la commercialisation, la création et la diffusion du progrès génétique via l'insémination et la vente de reproducteurs (béliers et agnelles). Application concrète de l'orientation décidée par l'OS CORSE. Prestation de pension d'agnelles de renouvellement en parallèle.",
-                roleOperationnel: [
-                "Vocation Commerciale (insémination, béliers reprod. / agnelles de renouvellement) issue du schéma de sélection encadré par l’OS",
-                "Appui à la repro, réserve 'sanitaire' en cas de crise",
-                "Inséminations, reproducteurs, pensions d'agnelles, traitements hormonaux"
-                ],
-                attentes: [
-                "Coordination et fédération de l’ensemble des structures autour des élevages OCC",
-                "Mettre en place les orientations stratégiques de la filière",
-                "OS CORSE devrait répondre à une demande l’ILOCC",
-                "Observatoire des prix de l’activité / transparence des informations sur toute la filière",
-                "Faire émerger les attentes et les besoins de la filière"
-                ],
-                definitions: "Bras armé de l'OS Corse sur le terrain. Réalise l'Insémination Artificielle (IA) et vend les reproducteurs sélectionnés.",
-                liens: "OS CORSE",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 9,
-                intitule: "L'Association Capraghji Corsi",
-                cat: "TECHNIQUE / PRODUCTEUR",
-                objetSocial: "protection et promotion de la chèvre corse, amélioration génétique de la race, lutte et prévention sanitaire, promotion et valorisation des produits issus de la chèvre corse",
-                roleOperationnel: [
-                "Défense, protection et promotion de la chèvre en race Corse",
-                "Amélioration génétique de la race",
-                "Lutte et prévention sanitaire, promotion et valorisation des produits issus de l'élevage caprin en race Corse",
-                "Filière caprine, lait et viande",
-                "Nous travaillons en collaboration avec les chefs de projet en filière caprine de l'Odarc pour la sélection de Bouc (2 chefs de projets en filière caprine). On donne notre avis sur les orientations phéno/géno chèvre corse",
-                "Mesure principale: sélection de petits boucs à destination du haras qui se trouve sur la station d'Altiani",
-                "IGP Cabri de lait"
-                ],
-                attentes: [
-                "En tant qu’éleveur, nous attendons que l’ILOCC coordonne",
-                "Garant de la production et de la qualité",
-                "L’ILOCC doit être l’entité qui porte les besoins de la profession et en retour apporte des solutions",
-                "Avec l'ilocc, le but est de développer / pérennité de la filière caprine",
-                "Avoir un lien avec toutes les structures dans le but d'avoir une vision globale de la situation et savoir quels leviers actionner pour conserver, améliorer et dynamiser la filière"
-                ],
-                definitions: "Travaille sur le phénotype et génotype de la chèvre. Gère la station d'Altiani (pépinière de boucs). Porte l'IGP Cabri.",
-                liens: "ODARC",
-                qualite: "IGP CABRI DE LAIT",
-                membre: true,
-                absent: false
-            },
-            {
-                id: 10,
-                intitule: "GDS (FEDERATION DES GROUPEMENTS DE DEFENSE SANITAIRE)",
-                cat: "TECHNIQUE / SANITAIRE",
-                objetSocial: "Amélioration de l'état sanitaire du cheptel en Corse",
-                roleOperationnel: [
-                "Missions déléguées par l’état (prophy. / ...)",
-                "Appui technique sanitaire dans les élevages (multi-filière ovin/caprin, porcin, abeilles / bovins, ...)",
-                "Amélioration de la santé des animaux // collab. avec les véto / éleveurs / acteurs de la filière",
-                "Prévention et lutte contre certaines maladies ==> mise en place des dispositifs de prise en charge/ surveillance",
-                "Coordination"
-                ],
-                attentes: [
-                "Rôle de coordination",
-                "Chef de file",
-                "Faire le lien entre l’amont / l’aval",
-                "Centralisation des informations / relais des actions de chacun",
-                "Convergence des actions de terrain"
-                ],
-                definitions: "Transversal (ovins, caprins, porcins, etc.). Gère la prophylaxie (campagnes obligatoires) et les crises (FCO, etc.).",
-                liens: "",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 11,
-                intitule: "ASSOC. DEFENSE COLLECTEURS-TRANSFORMATEURS",
-                cat: "TRANSFORMATION / INDUSTRIE",
-                objetSocial: "défense de l'activité de transformation fromagère de la production corse ovine et caprine",
-                roleOperationnel: ["ABS (Absent lors de l'atelier)"],
-                attentes: ["ABS (Absent lors de l'atelier)"],
-                definitions: "",
-                liens: "",
-                qualite: "",
-                membre: true,
-                absent: true
-            },
-            {
-                id: 12,
-                intitule: "AOP BROCCIU",
-                cat: "QUALITÉ / ODG",
-                objetSocial: "Promotion de l'AOP Brocciu et de la filière laitière lors des évènements nationaux et locaux, interventions auprès des scolaires, promotion sur les réseaux sociaux. Gestion de la partie certification grâce aux contrôles. Participation aux échanges nationaux à travers le CNAOL (comité national des appellations d'origine laitières)",
-                roleOperationnel: [
-                "ODG (réglementaire)",
-                "Délégation des services de l’état (animation, contrôle, suivi)",
-                "Défense et promotion du Brocciu",
-                "Certification des produits / Contrôle / Suivi",
-                "Défense de la race Corse",
-                "Information, connaissance des volumes",
-                "Coordination avec les services de l’ETAT / INAO /",
-                "échanges avec le CNAOL et les députés sur des sujets tels que le Nutri-Score, le lait cru)"
-                ],
-                attentes: [
-                "Garant de la qualité et de la production du lait",
-                "Chef de file",
-                "Garant des orientations décidées collectivement",
-                "Observatoire des prix",
-                "Soutient de l’acteur",
-                "Assurer la pérennité de la production de lait en Corse"
-                ],
-                definitions: "Gère le cahier des charges AOP. Lien avec l'INAO. Défend l'utilisation exclusive des races corses.",
-                liens: "",
-                qualite: "AOP BROCCIU",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 13,
-                intitule: "CHAMBRE D'AGRICULTURE CORSE",
-                cat: "INSTITUTIONNEL / CONSULAIRE",
-                objetSocial: "Représentation politique du monde agricole / La voix des éleveurs auprès de l’état/ Corse / UE",
-                roleOperationnel: [
-                "Représentation politique du monde agricole",
-                "La voix des éleveurs auprès de l’état/ Corse / UE",
-                "Défense de la caractérisation de l’élevage insulaire",
-                "Développement / accompagnement direct aux éleveurs (dans toutes les dimensions de l’accompagnement)",
-                "Veille sanitaire (intervenir dans le portage de démarche collective)",
-                "Mission déléguée par l’OS - contrôle laitier officiel",
-                "Animation de collectif d’éleveurs / cadre territorialisé",
-                "Interface de l’interprofession pour faire remonter les besoins spécifiques de la filière auprès des interloc. Corse / Etat / UE"
-                ],
-                attentes: [
-                "Assurer la coor. et la gourvenance de la filière ==> vision commune / voies de convergence vers une vision commune ==> Arbitrer selon les besoins (normes / prix / qualité)",
-                "dialogue amont / aval",
-                "Rôle économique - assurer le suivi des marchés / prix / volumes / partage de la valeur ==> soutenir l’organisation économique",
-                "Structurer les collèges pour chacun soit représenté à “force égal”",
-                "Orientations sur quel type de produit / traçabilité / qualité",
-                "Coordonner l’ensemble de la promotion “collective”",
-                "Gérer les cotisations interpro"
-                ],
-                definitions: "Instance consulaire. Délégataire du Contrôle Laitier pour l'OS. Accompagne l'installation et les dossiers PAC.",
-                liens: "OS",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 14,
-                intitule: "ODARC (OFFICE DEVELOP. AGRICOLE RURAL CORSE)",
-                cat: "INSTITUTIONNEL / FINANCEUR",
-                objetSocial: "EPIC sous tutelle de la Collectivité de Corse en charge de la mise en œuvre de la politique agricole de la Collectivité de Corse.Organisme payeur des aides FEADER en Corse.",
-                roleOperationnel: [
-                "En charge de la mise en oeuvre de la politique agricole de ccorse",
-                "Délégué travail de l’autorité de gestion",
-                "Deuxième pilier de la PAC",
-                "Financement des actions et des opérateurs de la filière",
-                "Intervient dans le financement de plusieurs plans et dossiers (sanitaire / technique, ...)",
-                "Appui technique et sanitaire aussi en tant que coopérateur",
-                "R&D ⟶ analyse dans nos labo pour les IGP ag/cab, sur les casgu / filière lait / brebis",
-                "Gestion foncier ⟶ pour récupérer du foncier à mettre à disposition des éleveurs",
-                "Formation et transmission (contrat de coopération / accueil de futures jeunes éleveurs avant leur installation) / Fromagerie",
-                "Commercialisation - appui financier au montage de projet dans le cadre de démarches collectives",
-                "Promotion : Mise en place de campagne de promotion / label resto qui met en avant les structures qui d’approvisionnement locaux / Salon de l’agriculture et not. le fromage",
-                "Participation au financement des opérateurs de la filière (plan ambition avec FAM, plan capra sana, plan tremblante, FCO, etc.)",
-                "Financement des dossiers de modernisation des exploitations agricoles",
-                "Mise en place et financement des CCPA",
-                "Assure en partenariat avec l'association Capraghi corsi les missions en lien avec le schéma de sélection de la race caprine corse"
-                ],
-                attentes: [
-                "Définition des enjeux collectifs",
-                "Gouvernance ⟶ imposer des choix de trajectoire auprès de l’ensemble des membres du collège",
-                "Coordination des actions des acteurs de la filière au service de la trajectoire définit par l’ILOCC",
-                "Chef de file des projets de la filière (retenu dans le cadre des actions financées par l’ODARC)",
-                "Elaboration des données de la filière",
-                "Mettre en place la CVO (réallocation)"
-                ],
-                definitions: "Bras armé de la Collectivité de Corse. Financeur majeur (installations, équipements, plans sanitaires).",
-                liens: "AOP BROCCIU, Association Capraghji, AREO",
-                qualite: "",
-                membre: false,
-                absent: false
-            },
-            {
-                id: 15,
-                intitule: "FRANCEAGRIMER",
-                cat: "INSTITUTIONNEL / TUTELLE",
-                objetSocial: "Administration publique (tutelle) des activités économiques",
-                roleOperationnel: [
-                "Financement du fonctionnement de l'interprofession et notamment son rôle de coordination et chef de file de la filière",
-                "Financement des actions de structuration des filières",
-                "Financement des actions de promotion dans le cadre des dispositifs nationaux et européens",
-                "Financement appui technique et plan sanitaire auprès des structures concernées",
-                "Financement des actions de RD notamment dans le cadre du schéma de sélection porté par l'OS & la Corsia",
-                "Appui au développement de projets de filières"
-                ],
-                attentes: [
-                "ABS"
-                ],
-                definitions: "Régulateur et financeur national. Surveille les marchés et intervient en cas de crise.",
-                liens: "OS, CORSIA",
-                qualite: "",
-                membre: false,
-                absent: false
-            }
-        ];
-
-        // --- MATRIX DATA (CORRECTED BASED ON CSV) ---
-        const matrixData = [
-            { id: 1, rep: "Interprofession / National", gov: "Coordination filière", tech: "Animation technique", sani: "Gestion AOP Brocciu", eco: "Observatoire prix / Promo" },
-            { id: 2, rep: "Défense intérêts éco", gov: "-", tech: "-", sani: "-", eco: "Revenu éleveurs" },
-            { id: 3, rep: "-", gov: "-", tech: "Collecte / Abattage", sani: "IGP Agneau", eco: "Commercialisation / Valo" },
-            { id: 4, rep: "-", gov: "-", tech: "Assistance technique / Appro", sani: "IGP Agneau / Sanitaire", eco: "Mise en marché / Coproduits" },
-            { id: 5, rep: "Producteurs Fermiers", gov: "-", tech: "-", sani: "-", eco: "Promotion fermière" },
-            { id: 6, rep: "Métier Berger/Fermier", gov: "-", tech: "-", sani: "Veille Sanitaire & Réglem.", eco: "Promo Circuits Courts" },
-            { id: 7, rep: "Promotion Race", gov: "Objectifs Sélection", tech: "Génétique / Contrôle Perf", sani: "Certification Race", eco: "-" },
-            { id: 8, rep: "-", gov: "-", tech: "Insémination (IA) / Repro", sani: "Réserve Sanitaire", eco: "Vente Reproducteurs" },
-            { id: 9, rep: "Défense Chèvre Corse", gov: "-", tech: "Sélection / Boucs", sani: "Lutte Sani / IGP Cabri", eco: "Filière Lait & Viande" },
-            { id: 10, rep: "-", gov: "Coordination Sanitaire", tech: "Appui Élevage", sani: "Prophylaxie / Crises", eco: "-" },
-            { id: 11, rep: "Transformateurs", gov: "-", tech: "-", sani: "-", eco: "Défense Activité" },
-            { id: 12, rep: "Défense AOP", gov: "ODG (Cahier des charges)", tech: "Contrôles", sani: "Certification / Race", eco: "Volumes / Promo" },
-            { id: 13, rep: "Politique / Voix Éleveurs", gov: "-", tech: "Dvt / Contrôle Laitier", sani: "Veille Terrain", eco: "-" },
-            { id: 14, rep: "Politique CdC", gov: "Autorité Gestion", tech: "R&D / Foncier / Formation", sani: "Labo / Appui", eco: "Financement (PAC) / Promo" },
-            { id: 15, rep: "Tutelle État", gov: "-", tech: "Financement R&D", sani: "Financement Plans", eco: "Financement Structuration" }
-        ];
-
-        // --- INTERACTION LOGIC ---
-        function highlightInterproMembers() {
-            document.querySelectorAll('.node-base').forEach(node => {
-                if (node.id === 'hub-ilocc') return;
-                if (node.classList.contains('is-interpro-member')) {
-                    node.classList.add('is-member-highlight');
-                } else {
-                    node.classList.add('not-member-dimmed');
-                }
-            });
-        }
-
-        function clearMemberHighlight() {
-            document.querySelectorAll('.node-base').forEach(node => {
-                node.classList.remove('is-member-highlight', 'not-member-dimmed');
-            });
-        }
-
-        // --- RENDER FUNCTIONS ---
-        // 1. Acteurs (D.I.X.)
-        let selectedId = 1;
-        let searchTerm = "";
-        let filterMember = false;
-
-        // Init Lucide icons
-        lucide.createIcons();
-
-        function renderLexicon() {
-            const container = document.getElementById('lexicon-content');
-            container.innerHTML = lexiconData.sort((a,b) => a.term.localeCompare(b.term)).map(item => `
-                <div class="pb-4 border-b border-[#f3f3f3] last:border-0 last:pb-0">
-                    <span class="font-oswald uppercase font-normal text-dix-dark block mb-1 tracking-wide">${item.term}</span>
-                    <p class="text-sm text-dix-dark leading-relaxed opacity-90">${item.def}</p>
-                </div>
-            `).join('');
-        }
-
-        function toggleLexicon(show) {
-            const modal = document.getElementById('lexicon-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
-
-        function renderList() {
-            const listContainer = document.getElementById('actor-list');
-            const filteredData = data.filter(actor => {
-                const matchesSearch = actor.intitule.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchesMember = filterMember ? actor.membre : true;
-                return matchesSearch && matchesMember;
-            });
-
-            if (filteredData.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="p-8 text-center text-dix-dark opacity-40 text-sm italic font-georgia">
-                        Aucune structure trouvée.
-                    </div>
-                `;
-                return;
-            }
-
-            listContainer.innerHTML = filteredData.map(actor => {
-                const isActive = selectedId === actor.id;
-                const activeClass = isActive 
-                    ? 'bg-[#f3f3f3] border-l-4 border-dix-dark text-dix-dark' 
-                    : 'hover:bg-[#f3f3f3]/50 border-l-4 border-transparent text-dix-dark opacity-80';
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center">
                 
-                return `
-                    <button 
-                        onclick="selectActor(${actor.id})"
-                        class="w-full text-left p-4 transition-all duration-200 flex items-center justify-between group ${activeClass}"
-                    >
-                        <div class="overflow-hidden">
-                            <div class="font-oswald uppercase text-sm truncate font-normal tracking-wide">${actor.intitule}</div>
-                            ${actor.qualite ? `
-                                <span class="text-xs text-[#549e39] font-georgia italic font-medium inline-flex items-center gap-1 mt-1 truncate">
-                                    <i data-lucide="award" class="w-3 h-3 flex-shrink-0"></i> ${actor.qualite}
-                                </span>
-                            ` : ''}
+                <!-- Logo 1: Métropole de Lyon (URL Rétablie vers une version simple) -->
+                <div class="logo-ref-block">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://www.lyoncapitale.fr/wp-content/uploads/2022/09/logo-metropole-grand-lyon-580x203.png" 
+                         alt="Logo Métropole de Lyon" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=M%C3%A9tropole+Lyon'">
+                </div>
+                
+                <!-- Logo 2: Bordeaux Métropole (URL Rétablie vers une version simple) -->
+                <div class="logo-ref-block">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://grapheine.com/wp-content/uploads/2015/01/logo-bordeaux-metropole1-1024x425.webp" 
+                         alt="Logo Bordeaux Métropole" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Bordeaux+M%C3%A9tropole'">
+                </div>
+                
+                <!-- Logo 3: Grand Paris Sud (URL Rétablie vers une version simple) -->
+                <div class="logo-ref-block">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://static.neopse.com/medias/p/2144/site/43/27/15/432715687066024f603d4cc777bb15e74c6a218f.jpg?v=v1" 
+                         alt="Logo Grand Paris Sud" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Grand+Paris+Sud'">
+                </div>
+                
+                <!-- Logo 4: Val de Garonne (URL Fichier Source) -->
+                <div class="logo-ref-block">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://valdegaronne.fr/uploads/Eam/mod-1/logo.png" 
+                         alt="Logo Val de Garonne" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Val+de+Garonne'">
+                </div>
+                
+                <!-- Logo 5: Ceinture Aliment-Terre de Liège (URL Rétablie vers une version simple) -->
+                <div class="logo-ref-block">
+                    <!-- Suppression de la classe h-10 -->
+                    <img src="https://s2.qwant.com/thumbr/474x225/d/2/bf5ad87117900ed771247e99f40f6157aa99f82197779c81834fd1886bcf31/OIP.M13IJL0DcPq0TrR45BoBhwHaDh.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%2Fid%2FOIP.M13IJL0DcPq0TrR45BoBhwHaDh%3Fpid%3DApi&q=0&b=1&p=0&a=0" 
+                         alt="Logo Ceinture Aliment-Terre de Liège" 
+                         class="w-auto object-contain"
+                         onerror="this.src='https://placehold.co/120x60/FFFFFF/405F59/png?text=Ceinture+Li%C3%A8ge'">
+                </div>
+
+            </div>
+
+            <div class="mt-16">
+                <!-- LIEN MIS À JOUR EN BOUTON -->
+                <a href="https://www.dix-autrement.fr/references" target="_blank" class="bg-brandLight text-white px-8 py-3 text-xl shadow-lg hover:bg-brandDark transition transform hover:-translate-y-0.5 btn-text">
+                    Voir nos références détaillées
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="offre" class="bg-brandBg">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white border-2 border-brandDark overflow-hidden">
+                <div class="bg-brandDark text-white p-10 text-center">
+                    <h2 class="text-4xl text-brandDark text-white font-display">L'Offre Diagnostic Approfondi</h2>
+                    <p class="font-sans text-brandLight mt-2 text-lg">Forfait Tout Compris - 10 Jours Ouvrables</p>
+                </div>
+                
+                <div class="p-10 md:p-14">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-10 border-b border-gray-200 pb-10">
+                        <div>
+                            <ul class="space-y-4 text-brandDark text-lg">
+                                <li class="flex items-center"><i class="fas fa-check text-brandLight mr-4"></i> Analyse complète de conformité EGALIM</li>
+                                <li class="flex items-center"><i class="fas fa-check text-brandLight mr-4"></i> Matrice d'arbitrage budgétaire</li>
+                                <li class="flex items-center"><i class="fas fa-check text-brandLight mr-4"></i> Plan de pénétration Bio & SIQO</li>
+                                <!-- Libellé mis à jour : Bio et SIQO -->
+                                <li class="flex items-center"><i class="fas fa-check text-brandLight mr-4"></i> Audit de performance</li>
+                            </ul>
                         </div>
-                        ${actor.absent ? `
-                            <span class="ml-2 text-[10px] text-dix-dark opacity-50 px-2 py-0.5 border border-dix-dark/20 uppercase font-oswald tracking-wider flex-shrink-0">ABS</span>
-                        ` : ''}
-                    </button>
-                `;
-            }).join('');
+                        <div class="mt-8 md:mt-0 text-center md:text-right">
+                            <span class="text-brandDark font-sans">à partir de</span>
+                            <span class="block text-6xl font-display text-brandLight"> 4 800 € <span class="text-2xl text-brandDark">HT</span></span>
+                            <span class="text-brandDark font-sans">Mission complète</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <!-- BOUTON LIEN FORMULAIRE MIS À JOUR -->
+                        <a href="https://www.dix-autrement.fr/rdv" 
+                            class="bg-brandLight text-white px-12 py-5 text-xl font-display uppercase tracking-wider hover:bg-brandDark shadow-lg transition transform hover:-translate-y-1 w-full md:w-auto">
+                            Prendre RDV pour un échange
+                        </a>
+                        <!-- Ajout des coordonnées de contact direct -->
+                        <div class="mt-6 text-brandDark space-y-1">
+                            <p class="text-sm font-sans font-bold">Ou contacter directement :</p>
+                            <p class="text-lg font-display">Pierre-Alain Mory</p>
+                            <p class="text-sm font-sans"><a href="tel:0783000956" class="hover:underline">07 83 00 09 56</a></p>
+                            <p class="text-sm font-sans"><a href="mailto:pierre.alain.mory@dix-autrement.fr" class="hover:underline">pierre.alain.mory@dix-autrement.fr</a></p>
+                        </div>
+                        <!-- Suppression du texte demandé -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. DATA MOCKUP ---
+        const initialComplianceData = { 
+            compliance: [15, 30, 55], // Bio, Egalim, Standard
+            cost: [1.80, 2.10, 2.50],
+            costLabels: ['Coût Standard', 'Coût Durable', 'Coût Bio Cible'] 
+        };
+        const optimizedData = { 
+            compliance: [22, 35, 43], 
+            cost: [1.80, 1.40, 1.95],
+            costLabels: ['Coût Standard', 'Végétal/Légum.', 'Bio Cible'] 
+        };
+
+        // Ventilation par Famille (anonymisées basées sur vos fichiers)
+        const familyData = {
+            // "Légumes Frais" corrigé en "Légumes"
+            labels: ['Légumes', 'Viandes/Volaille', 'Féculents/Céréales', 'Produits Laitiers', 'Épicerie'],
+            initialVolumes: [35, 20, 15, 12, 18], // Distribution initiale (pourcentage simplifié)
+            optimizedVolumes: [45, 15, 18, 10, 12] // Redistribution vers Légumes (Bio) et Céréales (Marque de Qualité)
+        };
+
+
+        // --- 2. STATE & UI LOGIC ---
+        const state = { currentPhase: 1, simulationMode: 'initial' };
+        
+        const phases = {
+            // Durées ajustées sur 10 jours
+            1: { title: "COLLECTE", desc: "Récupération et normalisation des exports.", icon: "fa-filter", details: ["Transmission sécurisée", "Classification par famille", "Identification des niveaux de transformation"], days: "Jours 1-2" },
+            2: { title: "DIAGNOSTIC", desc: "Calcul précis des indicateurs de conformité.", icon: "fa-stethoscope", details: ["Calcul % Bio / Durable", "Identification des écarts", "Cartographie transformation"], days: "Jours 3-5" },
+            // Texte mis à jour dans la stratégie
+            3: { title: "STRATÉGIE", desc: "Analyse d'impact financier et scénarios.", icon: "fa-chess", details: ["Quantification Coût/Bénéfice", "Plan de pénétration Bio & SIQO", "Stratégie allotissement"], days: "Jours 6-8" },
+            // Libellé mis à jour
+            4: { title: "RESTITUTION", desc: "Remise du Plan Stratégique.", icon: "fa-file-signature", details: ["Rapport synthétique", "Plan d'actions correctives", "Présentation (1h30)"], days: "Jours 9-10" }
+        };
+
+        function setPhase(phaseId) {
+            state.currentPhase = phaseId;
             
-            lucide.createIcons();
-        }
-
-        function renderMain() {
-            const mainContainer = document.getElementById('main-content');
-            const actor = data.find(d => d.id === selectedId);
-
-            if (!actor) return;
-
-            // HTML Strings for Sections
-            const headerHtml = `
-                <div class="max-w-4xl mx-auto space-y-8">
-                    <div class="bg-white p-8 shadow-sm border-l-4 border-[#549e39] relative overflow-hidden">
-                        <div class="flex justify-between items-start relative z-10">
-                            <div class="w-full">
-                                <h2 class="text-3xl font-oswald uppercase font-normal text-dix-dark mb-3 leading-tight tracking-wide">${actor.intitule}</h2>
-                                <div class="flex flex-wrap gap-3 mt-4">
-                                    ${actor.membre ? `
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#549e39] text-[#f3f3f3] text-xs font-oswald uppercase tracking-wider">
-                                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Membre ILOCC
-                                        </span>
-                                    ` : `
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f3f3f3] text-dix-dark opacity-50 text-xs font-oswald uppercase tracking-wider border border-dix-dark/10">
-                                            Pas membre ILOCC
-                                        </span>
-                                    `}
-                                    
-                                    ${actor.qualite ? `
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-dix-dark text-[#f3f3f3] text-xs font-oswald uppercase tracking-wider">
-                                            <i data-lucide="award" class="w-3.5 h-3.5"></i> ${actor.qualite}
-                                        </span>
-                                    ` : ''}
-
-                                    ${actor.absent ? `
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 border border-dix-dark/20 text-dix-dark opacity-60 text-xs font-oswald uppercase tracking-wider">
-                                            <i data-lucide="x-circle" class="w-3.5 h-3.5"></i> Absent à l'atelier
-                                        </span>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
+            // 1. Gérer l'état actif/inactif des boutons de phase
+            document.querySelectorAll('[id^="btn-phase-"]').forEach(btn => {
+                btn.classList.remove('step-active');
+                btn.classList.add('step-inactive');
+            });
+            const activeBtn = document.getElementById(`btn-phase-${phaseId}`);
+            activeBtn.classList.add('step-active');
+            activeBtn.classList.remove('step-inactive'); // Retire la classe inactive de l'actif
+            
+            // 2. Mettre à jour le contenu
+            const data = phases[phaseId];
+            const container = document.getElementById('phase-content');
+            container.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-shrink-0 text-brandLight">
+                        <i class="fas ${data.icon} text-6xl"></i>
                     </div>
-
-                    <!-- BLOC 1: OFFICIEL -->
-                    <div class="bg-white shadow-sm flex flex-col border border-dix-dark/10">
-                        <div class="p-4 border-b border-dix-dark/10 bg-[#f3f3f3] flex items-center gap-2">
-                            <i data-lucide="book-open" class="w-5 h-5 text-dix-dark"></i>
-                            <h3 class="font-oswald uppercase font-normal text-dix-dark tracking-wide">Mission Officielle (Statuts)</h3>
+                    <div class="flex-grow text-center md:text-left">
+                        <h3 class="text-3xl text-brandDark mb-4 font-display">${data.title}</h3>
+                        <p class="text-brandDark text-xl mb-6">${data.desc}</p>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            ${data.details.map(d => `<div class="bg-gray-50 p-4 border border-gray-200 flex items-center gap-3"><i class="fas fa-check text-brandLight"></i><span class="text-brandDark text-sm">${d}</span></div>`).join('')}
                         </div>
-                        <div class="p-8 flex-1 flex flex-col gap-6">
-                            <div>
-                                <p class="text-dix-dark text-base leading-relaxed font-georgia border-l-2 border-[#549e39] pl-4 italic">
-                                    "${actor.objetSocial || "Information non disponible"}"
-                                </p>
-                            </div>
-                            
-                            ${(actor.definitions || (actor.liens && actor.liens !== "NC")) ? `
-                                <div class="pt-6 border-t border-dix-dark/10">
-                                    <h4 class="text-xs font-oswald text-[#549e39] uppercase tracking-widest mb-4 flex items-center gap-2">
-                                        <i data-lucide="info" class="w-3 h-3"></i> Contexte & Ecosystème
-                                    </h4>
-                                    
-                                    ${actor.definitions ? `
-                                        <div class="mb-4">
-                                            <p class="text-sm text-dix-dark opacity-80 leading-relaxed font-georgia whitespace-pre-line">
-                                                ${actor.definitions}
-                                            </p>
-                                        </div>
-                                    ` : ''}
-
-                                    ${(actor.liens && actor.liens !== "NC") ? `
-                                        <div class="flex items-start gap-3 bg-[#f3f3f3] p-4 border-l-2 border-dix-dark">
-                                            <i data-lucide="network" class="w-4 h-4 text-[#549e39] mt-1 flex-shrink-0"></i>
-                                            <div>
-                                                <span class="text-xs font-oswald uppercase text-dix-dark block mb-1 tracking-wide">Liens & Collaborations</span>
-                                                <span class="text-sm text-dix-dark font-georgia block italic">
-                                                    ${actor.liens.replace(/\n/g, ', ')}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-
-                    <!-- BLOC 2: OPERATIONNEL -->
-                    <div class="bg-white shadow-sm flex flex-col relative overflow-hidden border border-[#549e39]/20">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-[#549e39]"></div>
-                        <div class="p-4 border-b border-[#549e39]/10 bg-[#549e39]/10 flex items-center gap-2">
-                            <i data-lucide="file-text" class="w-5 h-5 text-[#549e39]"></i>
-                            <h3 class="font-oswald uppercase font-normal text-dix-dark tracking-wide">Rôle Opérationnel (Vécu terrain)</h3>
-                        </div>
-                        <div class="p-8 flex-1">
-                            ${actor.absent ? `
-                                <div class="flex flex-col items-center justify-center text-dix-dark opacity-40 text-sm text-center py-6">
-                                    <i data-lucide="x-circle" class="w-10 h-10 mb-3 opacity-30"></i>
-                                    <p class="font-georgia italic">Pas de remontée terrain directe.</p>
-                                    <p class="text-xs opacity-70 mt-1 font-oswald uppercase">(Acteur absent lors de l'atelier)</p>
-                                </div>
-                            ` : `
-                                <ul class="space-y-4">
-                                    ${actor.roleOperationnel.map(item => `
-                                        <li class="flex items-start gap-4 text-base text-dix-dark font-georgia">
-                                            <span class="mt-2 w-1.5 h-1.5 bg-[#549e39] flex-shrink-0"></span>
-                                            <span class="leading-relaxed">${item}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            `}
-                        </div>
-                    </div>
-
-                    <!-- BLOC 3: ATTENTES -->
-                    <div class="bg-dix-dark text-[#f3f3f3] p-8 shadow-md border-t-4 border-[#549e39]">
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="p-2 bg-[#549e39] text-[#f3f3f3]">
-                                <i data-lucide="target" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-oswald uppercase font-normal text-xl tracking-wide">Attentes vis-à-vis de l'ILOCC</h3>
-                                <p class="text-xs text-[#f3f3f3] opacity-60 font-georgia italic mt-1">Demandes politiques exprimées lors de l'atelier</p>
-                            </div>
-                        </div>
-
-                        ${(actor.attentes.length === 1 && actor.attentes[0].includes("ABS")) ? `
-                            <p class="text-sm text-[#f3f3f3] opacity-40 italic pl-2 font-georgia">Aucune attente exprimée (Structure absente).</p>
-                        ` : `
-                            <div class="grid grid-cols-1 gap-4">
-                                ${actor.attentes.map(item => `
-                                    <div class="bg-[#f3f3f3]/5 p-4 border border-[#f3f3f3]/10 flex items-start gap-4 hover:bg-[#f3f3f3]/10 transition-colors">
-                                        <i data-lucide="message-square" class="w-4 h-4 text-[#549e39] mt-1 flex-shrink-0"></i>
-                                        <span class="text-sm text-[#f3f3f3] font-georgia leading-relaxed">${item}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        `}
                     </div>
                 </div>
             `;
             
-            mainContainer.innerHTML = headerHtml;
-            lucide.createIcons();
+            // 3. Assurer que les libellés de jours sont corrects (re-assignation des jours)
+            for (let id = 1; id <= 4; id++) {
+                document.getElementById(`btn-phase-${id}`).querySelector('.font-sans').textContent = phases[id].days;
+            }
         }
 
-        function selectActor(id) {
-            selectedId = id;
-            renderList(); // Re-render list to update active state
-            renderMain();
+        function toggleCard(id) {
+            const longText = document.getElementById(`text-${id}-long`);
+            longText.classList.toggle('hidden');
         }
 
-        // 2. Matrix
-        function renderMatrix() {
-            const body = document.getElementById('matrix-body');
-            if(!body) return;
-            // Use matrixData but match order of data by ID or just use matrixData directly
-            // Mapping matrix data to ensure names are correct if we want
-            // But matrixData names are hardcoded in the array above, which is fine.
-            body.innerHTML = matrixData.map(a => `
-                <tr>
-                    <td class="font-oswald uppercase text-xs font-medium">${data.find(d=>d.id===a.id).intitule}</td>
-                    <td>${a.rep}</td>
-                    <td>${a.gov}</td>
-                    <td>${a.tech}</td>
-                    <td>${a.sani}</td>
-                    <td>${a.eco}</td>
-                </tr>
-            `).join('');
-        }
+        // --- 3. CHART LOGIC ---
+        let complianceChart, costChart, familyVolumeChart;
 
-        // 3. Vision Chart
-        let radarChart = null;
-        function initChart() {
-            const canvas = document.getElementById('expectationsRadar');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (radarChart) radarChart.destroy();
-            radarChart = new Chart(ctx, {
-                type: 'radar',
+        function initCharts() {
+            // Chart 1: Compliance (Doughnut)
+            const ctx1 = document.getElementById('complianceChart').getContext('2d');
+            complianceChart = new Chart(ctx1, {
+                type: 'doughnut',
                 data: {
-                    labels: [ 'Coordination', 'Gouvernance', 'Observatoire', 'Défense Spécificité', 'Veille Qualité', 'Promotion' ],
-                    datasets: [{
-                        label: 'Intensité de la demande',
-                        data: [10, 9, 8, 9, 7, 8],
-                        backgroundColor: 'rgba(180, 83, 9, 0.2)', // Amber-like
-                        borderColor: '#B45309',
-                        pointBackgroundColor: '#B45309',
-                        borderWidth: 2
-                    }]
+                    labels: ['Bio', 'EGALIM (hors Bio)', 'Standard'],
+                    datasets: [{ data: initialComplianceData.compliance, backgroundColor: ['#549e39', '#88a8a2', '#e0e0e0'], borderWidth: 0 }]
                 },
-                options: {
+                options: { 
+                    plugins: { 
+                        legend: { position: 'right', labels: { font: { family: 'Georgia' } } },
+                        title: { display: true, text: 'Objectifs EGALIM (en valeur)', font: { family: 'Oswald', size: 14 } }
+                    }, 
+                    maintainAspectRatio: false 
+                }
+            });
+
+            // Chart 2: Cost Analysis (Bar)
+            const ctx2 = document.getElementById('costChart').getContext('2d');
+            costChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: initialComplianceData.costLabels,
+                    datasets: [{ label: 'Coût (€)', data: initialComplianceData.cost, backgroundColor: '#405F59', borderRadius: 0 }]
+                },
+                options: { 
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { 
+                        legend: { display: false },
+                        title: { display: true, text: 'Coût Matière / Repas (€)', font: { family: 'Oswald', size: 14 } }
+                    },
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Chart 3: Family Volume (Stacked Bar Chart - Profil)
+            const ctx3 = document.getElementById('familyVolumeChart').getContext('2d');
+            familyVolumeChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: familyData.labels,
+                    datasets: [
+                        // Initial
+                        {
+                            label: 'Situation Initiale (%)',
+                            data: familyData.initialVolumes,
+                            backgroundColor: '#405F59', // brandDark
+                            borderRadius: 4
+                        },
+                        // Optimized (Starts empty for initial view)
+                        {
+                            label: 'Après Stratégie (%)',
+                            data: Array(familyData.labels.length).fill(0), 
+                            backgroundColor: '#549e39', // brandLight
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: { 
+                    indexAxis: 'y', // Barres horizontales pour un profil plus clair
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { 
-                        r: { suggestedMin: 0, suggestedMax: 10, ticks: { display: false },
-                            angleLines: { color: '#E5E7EB' }, grid: { color: '#E5E7EB' },
-                            pointLabels: { font: { size: 10, weight: '700', family: 'Oswald' }, color: '#4B5563' }
-                        } 
+                    scales: {
+                        x: { stacked: true }, // Empilé pour montrer la part de chaque famille
+                        y: { stacked: true, beginAtZero: true }
                     },
-                    plugins: { legend: { display: false } }
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'Georgia' } } },
+                        title: { display: true, text: 'Ventilation des Volumes par Famille de Produits (%)', font: { family: 'Oswald', size: 14 } }
+                    }
                 }
             });
         }
 
-        // 4. Render Attentes (New Function)
-        function renderAttentes() {
-            const keywordsContainer = document.getElementById('attentes-keywords');
-            const mainContainer = document.getElementById('attentes-container');
+        function updateCharts(mode) {
+            const data = mode === 'initial' ? initialComplianceData : optimizedData;
             
-            if (!keywordsContainer || !mainContainer) return;
+            // 1. Update Compliance Chart
+            complianceChart.data.datasets[0].data = data.compliance;
+            complianceChart.update();
 
-            // 1. Process Keywords (Simple word count from Expectations)
-            const stopWords = ['de', 'la', 'le', 'et', 'les', 'des', 'en', 'un', 'une', 'pour', 'dans', 'sur', 'au', 'aux', 'avec', 'par', 'ce', 'se', 'que', 'qui', 'ne', 'pas', 'du', 'a', 'à', 'est', 'sont'];
-            let wordCount = {};
+            // 2. Update Cost Chart
+            costChart.data.labels = data.costLabels;
+            costChart.data.datasets[0].data = data.cost;
+            costChart.data.datasets[0].backgroundColor = mode === 'initial' ? '#405F59' : '#549e39';
+            costChart.update();
             
-            data.forEach(actor => {
-                if (actor.attentes && !actor.attentes[0].includes("ABS")) {
-                    actor.attentes.forEach(text => {
-                        const words = text.toLowerCase().replace(/[.,/#!$%^&*;:{}=_`~()]/g,"").split(/\s+/);
-                        words.forEach(w => {
-                            if (w.length > 3 && !stopWords.includes(w)) {
-                                wordCount[w] = (wordCount[w] || 0) + 1;
-                            }
-                        });
-                    });
-                }
-            });
-            
-            // Manual boosting of concepts based on analysis
-            const concepts = [
-                { term: "COORDINATION", count: 12 },
-                { term: "GOUVERNANCE", count: 9 },
-                { term: "OBSERVATOIRE / DONNÉES", count: 8 },
-                { term: "CHEF DE FILE", count: 7 },
-                { term: "STRATÉGIE", count: 6 },
-                { term: "PROMOTION", count: 5 },
-                { term: "SANITAIRE", count: 4 },
-                { term: "DÉFENSE SPÉCIFICITÉ", count: 4 }
-            ];
+            // 3. Update Family Volume Chart (Stacked Bar - Profile)
+            if (mode === 'initial') {
+                // Pour la vue initiale, seule la dataset 'Situation Initiale' est remplie
+                familyVolumeChart.data.datasets[0].data = familyData.initialVolumes;
+                familyVolumeChart.data.datasets[1].data = Array(familyData.labels.length).fill(0); 
+            } else {
+                 // Pour la vue optimisée, seule la dataset 'Après Stratégie' est remplie
+                familyVolumeChart.data.datasets[0].data = Array(familyData.labels.length).fill(0);
+                familyVolumeChart.data.datasets[1].data = familyData.optimizedVolumes;
+            }
+            familyVolumeChart.update();
 
-            keywordsContainer.innerHTML = concepts.map(c => `
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f3f3f3] text-dix-dark text-xs font-oswald uppercase tracking-wide border border-dix-dark/10 rounded-full">
-                    ${c.term} <span class="bg-[#549e39] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">${c.count}</span>
-                </span>
-            `).join('');
 
-            // 2. Group by Category
-            const categories = {};
-            data.forEach(actor => {
-                const cat = actor.cat || "AUTRE";
-                if (!categories[cat]) categories[cat] = [];
-                categories[cat].push(actor);
-            });
+            // 4. Update Button Colors
+            document.getElementById('btn-initial').classList.remove('btn-simulation-active');
+            document.getElementById('btn-initial').classList.add('btn-simulation-inactive');
+            document.getElementById('btn-optimized').classList.remove('btn-simulation-active');
+            document.getElementById('btn-optimized').classList.add('btn-simulation-inactive');
 
-            // Summary map based on CSV analysis
-            const summaries = {
-                "INTERPROFESSION": "Rôle de chef de file pour la stratégie globale, la coordination et la défense des spécificités.",
-                "REPRÉSENTATION / SYNDICAT": "Défense du revenu et des intérêts économiques des éleveurs.",
-                "TECHNIQUE / COMMERCE": "Coordination forte et centralisation de l'information (rôle de chef de file).",
-                "PRODUCTEUR / FERMIER": "Besoin de fédération et de cohérence globale, sans ingérence dans l'opérationnel.",
-                "TECHNIQUE / GÉNÉTIQUE": "Attente d'orientations stratégiques claires pour aligner la sélection et besoin de transparence.",
-                "TECHNIQUE / PRODUCTEUR": "Coordination globale pour pérenniser la filière et garantir la qualité.",
-                "TECHNIQUE / SANITAIRE": "Rôle de coordination et de centralisation des informations sanitaires.",
-                "TRANSFORMATION / INDUSTRIE": "Défense des intérêts des transformateurs.",
-                "QUALITÉ / ODG": "Garantie des orientations collectives, de la qualité et suivi économique (observatoire).",
-                "INSTITUTIONNEL / CONSULAIRE": "Gouvernance partagée, arbitrage et coordination de la promotion collective.",
-                "INSTITUTIONNEL / FINANCEUR": "Gouvernance capable d'imposer des choix de trajectoire et de coordonner les actions.",
-                "INSTITUTIONNEL / TUTELLE": "Accompagnement et structuration."
-            };
-
-            // 3. Render Cards
-            mainContainer.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    ${Object.keys(categories).map(cat => `
-                        <div class="space-y-4">
-                            <div class="border-b border-[#549e39]/30 pb-2 mb-4">
-                                <h3 class="font-oswald text-xl text-[#549e39]">${cat}</h3>
-                                ${summaries[cat] ? `<p class="text-sm text-dix-dark opacity-70 font-georgia mt-1 italic">"${summaries[cat]}"</p>` : ''}
-                            </div>
-                            <div class="grid gap-6">
-                                ${categories[cat].map(actor => {
-                                    const isAbs = actor.attentes[0].includes("ABS");
-                                    return `
-                                        <div class="bg-white rounded p-6 shadow-sm border border-dix-dark/10 flex flex-col h-full ${isAbs ? 'opacity-60 bg-gray-50' : ''}">
-                                            <div class="flex items-start justify-between mb-4 border-b border-gray-100 pb-2">
-                                                <h4 class="font-oswald uppercase text-dix-dark text-sm font-medium leading-snug pr-2">${actor.intitule}</h4>
-                                                ${isAbs ? '<span class="text-[10px] font-oswald text-gray-400 border border-gray-200 px-1 rounded">ABS</span>' : ''}
-                                            </div>
-                                            <div class="flex-1">
-                                                ${isAbs ? 
-                                                    '<p class="text-xs text-gray-400 italic font-georgia">Aucune attente exprimée (Absent).</p>' : 
-                                                    `<ul class="space-y-2">
-                                                        ${actor.attentes.map(a => `
-                                                            <li class="flex items-start gap-2 text-xs text-dix-dark/80 font-georgia leading-relaxed">
-                                                                <span class="mt-1.5 w-1 h-1 bg-[#549e39] rounded-full flex-shrink-0"></span>
-                                                                <span>${a}</span>
-                                                            </li>
-                                                        `).join('')}
-                                                    </ul>`
-                                                }
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            lucide.createIcons();
+            if (mode === 'initial') {
+                document.getElementById('btn-initial').classList.add('btn-simulation-active');
+                document.getElementById('btn-initial').classList.remove('btn-simulation-inactive');
+            } else {
+                document.getElementById('btn-optimized').classList.add('btn-simulation-active');
+                document.getElementById('btn-optimized').classList.remove('btn-simulation-inactive');
+            }
         }
 
-        // Listeners
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            searchTerm = e.target.value;
-            renderList();
+        document.addEventListener('DOMContentLoaded', () => { 
+            setPhase(1); 
+            initCharts();
+            updateCharts('initial'); // Initialiser les boutons
         });
-
-        document.getElementById('filter-member').addEventListener('change', (e) => {
-            filterMember = e.target.checked;
-            renderList();
-        });
-
-        // Initialize
-        renderLexicon();
-        renderList();
-        renderMain();
-
     </script>
 </body>
 </html>
